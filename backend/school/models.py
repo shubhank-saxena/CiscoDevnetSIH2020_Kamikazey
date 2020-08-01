@@ -14,7 +14,7 @@ class School(models.Model):
     principal = models.CharField(blank=False, max_length=50)
     workers_count = models.PositiveIntegerField(blank=True)
     students_count = models.PositiveIntegerField(blank=True)
-    under_supervisor = models.ForeignKey(User, on_delete=models.SET_NULL)
+    under_supervisor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name = "School"
