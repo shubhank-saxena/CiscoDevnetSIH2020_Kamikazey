@@ -9,6 +9,7 @@ import Dashboard from '../pages/Dashboard';
 import School from '../pages/School';
 import CisAdmin from '../pages/AssistantPages';
 import Principal from '../pages/Principal';
+import Student from '../components/Principal/Student';
 const Routes = () => {
   return (
     <>
@@ -41,6 +42,7 @@ const Routes = () => {
           isPrivate
           principal
         />
+        <Route exact path="/student" component={Student} isPrivate principal />
         <Route exact path="/" component={Login} isLoginRoute />
       </Switch>
     </>

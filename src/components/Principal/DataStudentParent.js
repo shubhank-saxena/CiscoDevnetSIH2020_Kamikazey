@@ -8,6 +8,7 @@ import {
 } from '../../styles/globalStyles';
 import { Table, Popover, Button } from 'antd';
 import data from '../../constants/lang';
+import history from '../../services/history';
 
 const Data = [
   {
@@ -61,7 +62,19 @@ function DataStudentParent({ lang }) {
         <Popover
           title="Student's Picture"
           trigger="hover"
-          content={<img src={rec.image} style={{ width: 150 }}></img>}
+          content={
+            <div>
+              <img src={rec.image} style={{ width: 150 }}></img>
+              <br />
+              <Button
+                onClick={() => {
+                  history.push('/student');
+                }}
+              >
+                Click
+              </Button>
+            </div>
+          }
         >
           {rec.name}
         </Popover>
@@ -92,7 +105,14 @@ function DataStudentParent({ lang }) {
       </HugeHeading>
       <Table dataSource={Data} columns={columns} />
       <div style={{ marginTop: '10px' }} />
-      <Button type="primary">create new student</Button>
+      <Button
+        type="primary"
+        onClick={() => {
+          history.push('/student');
+        }}
+      >
+        create new student
+      </Button>
     </div>
   );
 }
