@@ -46,7 +46,7 @@ class WastageSerializer(ModelSerializer):
 class FoodScheduleSerializer(ModelSerializer):
 
     time = TimeField(format='%I:%M %p', input_formats=None)
-    wastage_set = WastageSerializer(many=True)
+    wastage_set = WastageSerializer(many=True, required=False)
 
     class Meta:
         model = FoodSchedule

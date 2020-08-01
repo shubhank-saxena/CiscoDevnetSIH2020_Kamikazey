@@ -1,5 +1,5 @@
 from backend.school.models import School, FoodSchedule, Wastage, FoodItem, FoodItemDayMap, Report, Attendance, Contractor
-from backend.school.api.permissions import IsCiscoAdmin, IsSchoolPrincipal, IsCiscoAdminOrSupervisor
+from backend.school.api.permissions import IsCiscoAdmin, IsSchoolPrincipal, IsCiscoAdminOrSupervisor, IsSchoolPrincipalOrSupervisor
 from .serializers import (
     SchoolSerializer,
     SchoolCreateSerializer,
@@ -14,6 +14,7 @@ from .serializers import (
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, generics
+from rest_framework.authtoken.models import Token
 
 
 class SchoolViewset(viewsets.ModelViewSet):
@@ -44,6 +45,11 @@ class SchoolViewset(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_action_classes[self.action]
 
+    def get_queryset(self):
+        if Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user.groups.first().name == "Cis-Admin":
+            return self.queryset.all()
+        return self.queryset.filter(under_supervisor=Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user)
+
 
 class FoodScheduleViewset(viewsets.ModelViewSet):
     """Manage Food Schedule in the database"""
@@ -51,7 +57,7 @@ class FoodScheduleViewset(viewsets.ModelViewSet):
     serializer_class = FoodScheduleSerializer
     queryset = FoodSchedule.objects.all()
     permission_classes = [
-        IsSchoolPrincipal,
+        IsSchoolPrincipalOrSupervisor,
     ]
 
 
@@ -70,9 +76,19 @@ class FoodItemViewset(viewsets.ModelViewSet):
 
     serializer_class = FoodItemSerializer
     queryset = FoodItem.objects.all()
-    permission_classes = [
-        IsCiscoAdmin,
-    ]
+    permission_classes_by_action = {
+        'create': [IsAuthenticated, IsCiscoAdmin],
+        'list': [IsAuthenticated],
+        'retrieve': [IsAuthenticated],
+        'partial_update': [IsAuthenticated, IsCiscoAdmin],
+        'destroy': [IsAuthenticated, IsCiscoAdmin],
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except Exception:
+            return [permission() for permission in self.permission_classes]
 
 
 class FoodItemDayMapViewset(viewsets.ModelViewSet):
@@ -81,7 +97,7 @@ class FoodItemDayMapViewset(viewsets.ModelViewSet):
     serializer_class = FoodItemDayMapSerializer
     queryset = FoodItemDayMap.objects.all()
     permission_class = [
-        IsSchoolPrincipal,
+        IsSchoolPrincipalOrSupervisor,
     ]
 
 
