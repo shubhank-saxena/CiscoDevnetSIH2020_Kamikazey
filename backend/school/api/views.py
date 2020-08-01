@@ -75,7 +75,7 @@ class AttendanceViews(generics.ListCreateAPIView):
     ]
 
     def get_queryset(self):
-        attendances = self.queryset
+        attendances = self.queryset.all()
         attendance_of_school = []
         for attendance in attendances:
             if attendance.of_student.of_school.organisation_id == self.kwargs['organisation_id']:
