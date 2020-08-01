@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.exceptions import PermissionDenied
 
 
 class School(models.Model):
@@ -11,10 +12,10 @@ class School(models.Model):
     URL = models.URLField(max_length=200, blank=False, unique=True)
     email = models.EmailField(max_length=255, unique=True, verbose_name='email address of any school person', blank=True)
     contact_no = models.PositiveIntegerField()
-    principal = models.CharField(blank=False, max_length=50)
+    principal = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='principal_set')
     workers_count = models.PositiveIntegerField(blank=True)
     students_count = models.PositiveIntegerField(blank=True)
-    under_supervisor = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
+    under_supervisor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='supervisor_set')
 
     class Meta:
         verbose_name = "School"
@@ -22,6 +23,12 @@ class School(models.Model):
 
     def __str__(self):
         return f'{self.organisation_id} - {self.name}'
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.under_supervisor.groups.first().name == "Supervisor" and self.principal.groups.first().name == "Principal":
+            return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+        else:
+            raise PermissionDenied
 
 
 class FoodSchedule(models.Model):

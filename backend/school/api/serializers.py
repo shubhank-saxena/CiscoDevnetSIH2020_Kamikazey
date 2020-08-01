@@ -1,23 +1,38 @@
 from rest_framework.serializers import ModelSerializer, TimeField
 from django.contrib.auth.models import User
-from backend.school.models import School, FoodSchedule, FoodItem, FoodItemDayMap, Report, Wastage, Attendance
+from backend.school.models import School, FoodSchedule, FoodItem, FoodItemDayMap, Report, Wastage, Attendance, Contractor
 from backend.user.models import Student
 
 
-class SupervisorSerializer(ModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'name']
+        fields = ['id', 'email']
+        read_only_fields = ['id']
+
+
+class ContractorSerializer(ModelSerializer):
+    class Meta:
+        model = Contractor
+        fields = ['username', 'name', 'school']
+
+
+class SchoolCreateSerializer(ModelSerializer):
+    class Meta:
+        model = School
+        fields = ['organisation_id', 'name', 'api_key', 'URL', 'email', 'contact_no', 'principal', 'workers_count', 'students_count', 'under_supervisor']
         read_only_fields = ['id']
 
 
 class SchoolSerializer(ModelSerializer):
 
-    under_supervisor = SupervisorSerializer(required=True)
+    under_supervisor = UserSerializer()
+    contractor_set = ContractorSerializer(many=True, required=False)
+    principal = UserSerializer()
 
     class Meta:
         model = School
-        fields = ['organisation_id', 'name', 'api_key', 'URL', 'email', 'contact_no', 'principal', 'workers_count', 'students_count', 'under_supervisor']
+        fields = ['organisation_id', 'name', 'api_key', 'URL', 'email', 'contact_no', 'principal', 'workers_count', 'students_count', 'under_supervisor', 'contractor_set']
         read_only_fields = ['id']
 
 
