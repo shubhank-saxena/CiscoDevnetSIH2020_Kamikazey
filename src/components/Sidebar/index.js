@@ -6,6 +6,7 @@ import {
   LaptopOutlined,
   NotificationOutlined,
 } from '@ant-design/icons';
+import history from '../../services/history';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
@@ -103,6 +104,9 @@ function Sidebar({ selectedKey, setSelectedKey }) {
           margin: '70px auto',
         }}
         type="primary"
+        onClick={() => {
+          history.goBack();
+        }}
       >
         {collapsed ? <ArrowLeftOutlined /> : <GoBack />}
       </Button>
