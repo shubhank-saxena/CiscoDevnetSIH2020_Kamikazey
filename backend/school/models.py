@@ -130,8 +130,22 @@ class Attendance(models.Model):
     date = models.DateField(default=timezone.now())
     of_student = models.ForeignKey('user.Student', on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = 'Attendance'
+        verbose_name_plural = 'Attendances'
+
+    def __str__(self):
+        return f'{self.of_student} - {self.date} - {self.student_present}'
+
 
 class Contractor(models.Model):
     username = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=50)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Contractor'
+        verbose_name_plural = 'Contractors'
+
+    def __str__(self):
+        return f'{self.username}, {self.name} - school: {self.school}'

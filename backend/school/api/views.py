@@ -1,8 +1,8 @@
-from backend.school.models import School, FoodSchedule, FoodItem, FoodItemDayMap, Report, Wastage
+from backend.school.models import School, FoodSchedule, Wastage, FoodItem, FoodItemDayMap, Report, Attendance
 from .serializers import SchoolSerializer, FoodScheduleSerializer, FoodItemDayMapSerializer, FoodItemSerializer, ReportSerializer, WastageSerializer
 
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 
 
 class SchoolViewset(viewsets.ModelViewSet):
@@ -21,6 +21,16 @@ class FoodScheduleViewset(viewsets.ModelViewSet):
     serializer_class = FoodScheduleSerializer
     queryset = FoodSchedule.objects.all()
     permission_classes = [
+        IsAuthenticated,
+    ]
+
+
+class WastageViewset(viewsets.ModelViewSet):
+    """Manage Wastage in database"""
+
+    serializer_class = WastageSerializer
+    queryset = Wastage.objects.all()
+    permission_class = [
         IsAuthenticated,
     ]
 
@@ -55,11 +65,19 @@ class ReportViewset(viewsets.ModelViewSet):
     ]
 
 
-class WastageViewset(viewsets.ModelViewSet):
-    """Manage Wastage in database"""
+class AttendanceViews(generics.ListCreateAPIView):
+    """List and Create attendance"""
 
-    serializer_class = WastageSerializer
-    queryset = Wastage.objects.all()
+    serializer_class = None
+    queryset = Attendance.objects.all()
     permission_class = [
         IsAuthenticated,
     ]
+
+    def get_queryset(self):
+        attendances = self.queryset
+        attendance_of_school = []
+        for attendance in attendances:
+            if attendance.of_student.of_school.organisation_id == self.kwargs['organisation_id']:
+                attendance_of_school.append(attendance)
+        return attendance_of_school

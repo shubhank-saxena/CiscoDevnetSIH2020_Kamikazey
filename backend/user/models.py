@@ -6,6 +6,13 @@ class Student(models.Model):
     name = models.CharField(max_length=50)
     of_school = models.ForeignKey(School, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = "Student"
+        verbose_name_plural = "Students"
+
+    def __str__(self):
+        return f'{self.name} - {self.of_school}'
+
 
 class Parent(models.Model):
     name = models.CharField(max_length=50)
@@ -18,3 +25,10 @@ class Parent(models.Model):
         (MOTHER, 'MOTHER'),
     ]
     relation_with_student = models.CharField(max_length=10, choices=RELATION_CHOICES)
+
+    class Meta:
+        verbose_name = "Parent"
+        verbose_name_plural = "Parents"
+
+    def __str__(self):
+        return f'{self.name} - {self.relation_with_student} of - {self.of_student}'
