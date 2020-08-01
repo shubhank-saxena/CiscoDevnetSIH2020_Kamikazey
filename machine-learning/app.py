@@ -1,9 +1,8 @@
-import logging
 import os
 from predict import predict_main
 import requests
 
-from flask import Flask, request, redirect
+from flask import Flask, request
 
 
 app = Flask(__name__)
@@ -25,7 +24,7 @@ def predict():
         food_class = predict_main()
         os.remove('index.jpeg')
         return food_class
-    
+
     except Exception:
         os.remove('index.jpeg')
         return "Error in parsing"

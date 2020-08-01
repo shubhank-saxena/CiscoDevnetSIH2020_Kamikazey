@@ -1,10 +1,6 @@
 import torch
-import json
-from torch import nn, optim
-import torch.nn.functional as F
-from torchvision import datasets, transforms, models
+from torchvision import models
 import numpy as np
-from collections import OrderedDict
 from PIL import Image
 
 
