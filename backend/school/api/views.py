@@ -1,5 +1,5 @@
 from backend.school.models import School, FoodSchedule, Wastage, FoodItem, FoodItemDayMap, Report, Attendance
-from .serializers import SchoolSerializer, FoodScheduleSerializer, FoodItemDayMapSerializer, FoodItemSerializer, ReportSerializer, WastageSerializer
+from .serializers import SchoolSerializer, FoodScheduleSerializer, FoodItemDayMapSerializer, FoodItemSerializer, ReportSerializer, WastageSerializer, AttendanceSerializer
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, generics
@@ -68,7 +68,7 @@ class ReportViewset(viewsets.ModelViewSet):
 class AttendanceViews(generics.ListCreateAPIView):
     """List and Create attendance"""
 
-    serializer_class = None
+    serializer_class = AttendanceSerializer
     queryset = Attendance.objects.all()
     permission_class = [
         IsAuthenticated,
