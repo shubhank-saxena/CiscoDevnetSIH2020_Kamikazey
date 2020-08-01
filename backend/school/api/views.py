@@ -1,4 +1,5 @@
 from backend.school.models import School, FoodSchedule, Wastage, FoodItem, FoodItemDayMap, Report, Attendance, Contractor
+from backend.school.api.permissions import IsCiscoAdmin, IsSchoolPrincipal, IsCiscoAdminOrSupervisor
 from .serializers import (
     SchoolSerializer,
     SchoolCreateSerializer,
@@ -18,7 +19,6 @@ from rest_framework import viewsets, generics
 class SchoolViewset(viewsets.ModelViewSet):
     """Manage schools in the database"""
 
-    # serializer_class = SchoolSerializer
     serializer_action_classes = {
         'create': SchoolCreateSerializer,
         'list': SchoolSerializer,
@@ -26,10 +26,20 @@ class SchoolViewset(viewsets.ModelViewSet):
         'update': SchoolSerializer,
         'partial_update': SchoolSerializer,
     }
+    permission_classes_by_action = {
+        'create': [IsAuthenticated, IsCiscoAdmin],
+        'list': [IsAuthenticated, IsCiscoAdminOrSupervisor],
+        'retrieve': [IsAuthenticated, IsSchoolPrincipal],
+        'partial_update': [IsAuthenticated],
+        'destroy': [IsAuthenticated],
+    }
     queryset = School.objects.all()
-    permission_classes = [
-        IsAuthenticated,
-    ]
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except Exception:
+            return [permission() for permission in self.permission_classes]
 
     def get_serializer_class(self):
         return self.serializer_action_classes[self.action]
@@ -41,7 +51,7 @@ class FoodScheduleViewset(viewsets.ModelViewSet):
     serializer_class = FoodScheduleSerializer
     queryset = FoodSchedule.objects.all()
     permission_classes = [
-        IsAuthenticated,
+        IsSchoolPrincipal,
     ]
 
 
@@ -61,7 +71,7 @@ class FoodItemViewset(viewsets.ModelViewSet):
     serializer_class = FoodItemSerializer
     queryset = FoodItem.objects.all()
     permission_classes = [
-        IsAuthenticated,
+        IsCiscoAdmin,
     ]
 
 
@@ -71,7 +81,7 @@ class FoodItemDayMapViewset(viewsets.ModelViewSet):
     serializer_class = FoodItemDayMapSerializer
     queryset = FoodItemDayMap.objects.all()
     permission_class = [
-        IsAuthenticated,
+        IsSchoolPrincipal,
     ]
 
 
@@ -109,5 +119,5 @@ class ContractorViewset(viewsets.ModelViewSet):
     serializer_class = ContractorSerializer
     queryset = Contractor.objects.all()
     permission_class = [
-        IsAuthenticated,
+        IsSchoolPrincipal,
     ]
