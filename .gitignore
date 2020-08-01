@@ -13,3 +13,7 @@ am291-kamikazey
 # Accept these files in the repository
 !.gitignore
 !.travis.yml
+
+# Remove facerecog files
+dataset/
+data.yml
