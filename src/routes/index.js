@@ -8,31 +8,38 @@ import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
 import School from '../pages/School';
 import CisAdmin from '../pages/AssistantPages';
+import Principal from '../pages/Principal';
 const Routes = () => {
   return (
     <>
       <Switch>
         <Route
           exact
-          path="/dashboard"
-          component={Dashboard}
-          isPrivate
-          isSysAdmin
-        />
-        <Route
-          exact
           path="/school/:id"
           component={School}
           isPrivate
-          isSysAdmin
+          supervisor
         />
-        <Route exact path="/home" component={Home} isPrivate isSysAdmin />
         <Route
           exact
-          path="/dashboard-alt"
+          path="/dashboard-supervisor"
+          component={Dashboard}
+          isPrivate
+          supervisor
+        />
+        <Route
+          exact
+          path="/dashboard-cisadmin"
           component={CisAdmin}
           isPrivate
-          isAssistant
+          cisadmin
+        />
+        <Route
+          exact
+          path="/dashboard-principal"
+          component={Principal}
+          isPrivate
+          principal
         />
         <Route exact path="/" component={Login} isLoginRoute />
       </Switch>

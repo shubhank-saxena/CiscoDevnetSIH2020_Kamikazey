@@ -9,8 +9,9 @@ function RouteWrapper({
   component: Component,
   isPrivate,
   isLoginRoute,
-  isSysAdmin,
-  isAssistant,
+  supervisor,
+  principal,
+  cisadmin,
   auth: { isAuthenticated, userType },
   ...rest
 }) {
@@ -27,23 +28,32 @@ function RouteWrapper({
    * (SignIn or SignUp) after being authenticated.
    */
 
-  if (isLoginRoute && isAuthenticated && userType === 'Sys-Admin') {
-    return <Redirect to="/dashboard" />;
+  if (isLoginRoute && isAuthenticated && userType === 'Supervisor') {
+    return <Redirect to="/dashboard-supervisor" />;
   }
 
-  if (isLoginRoute && isAuthenticated && userType === 'Assistant') {
-    return <Redirect to="/dashboard-alt" />;
+  if (isLoginRoute && isAuthenticated && userType === 'Principal') {
+    return <Redirect to="/dashboard-principal" />;
+  }
+  if (isLoginRoute && isAuthenticated && userType === 'Cis-Admin') {
+    return <Redirect to="/dashboard-cisadmin" />;
   }
 
   /**
    * If not included on both previous cases, redirect user to the desired route.
    */
 
-  if (isSysAdmin && userType === 'Assistant') {
-    return <Redirect to="/dashboard-alt" />;
+  if (supervisor && userType !== 'Supervisor') {
+    if (cisadmin) return <Redirect to="/dashboard-cisadmin" />;
+    else return <Redirect to="/dashboard-principal" />;
   }
-  if (isAssistant && userType === 'Sys-Admin') {
-    return <Redirect to="/dashboard" />;
+  if (principal && userType !== 'Principal') {
+    if (cisadmin) return <Redirect to="/dashboard-cisadmin" />;
+    else return <Redirect to="/dashboard-supervisor" />;
+  }
+  if (cisadmin && userType !== 'Cis-Admin') {
+    if (supervisor) return <Redirect to="/dashboard-supervisor" />;
+    else return <Redirect to="/dashboard-principal" />;
   }
   return <Route {...rest} component={Component} />;
 }
@@ -53,8 +63,9 @@ RouteWrapper.propTypes = {
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
   isLoginRoute: PropTypes.bool,
-  isSysAdmin: PropTypes.bool,
-  isAssistant: PropTypes.bool,
+  supervisor: PropTypes.bool,
+  principal: PropTypes.bool,
+  cisadmin: PropTypes.bool,
 };
 
 RouteWrapper.defaultProps = {
