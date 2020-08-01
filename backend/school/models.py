@@ -1,6 +1,6 @@
 from django.db import models
-import datetime
 from django.contrib.auth.models import Group
+from django.utils import timezone
 
 
 class School(models.Model):
@@ -50,7 +50,7 @@ class FoodSchedule(models.Model):
 class Wastage(models.Model):
     quantity = models.DecimalField(max_digits=6, decimal_places=2)
     food_schedule = models.ForeignKey(FoodSchedule, on_delete=models.CASCADE, null=True, blank=True)
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(default=timezone.now())
 
     class Meta:
         verbose_name = "Food Wastage in kg/week"
@@ -127,7 +127,7 @@ class Report(models.Model):
 
 class Attendance(models.Model):
     student_present = models.BooleanField(default=False)
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(default=timezone.now())
     of_student = models.ForeignKey('user.Student', on_delete=models.CASCADE)
 
 
