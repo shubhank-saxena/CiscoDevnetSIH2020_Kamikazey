@@ -14,4 +14,5 @@ router.register('wastage', views.WastageViewset)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('attendance', views.AttendanceViews.as_view()),
 ]
