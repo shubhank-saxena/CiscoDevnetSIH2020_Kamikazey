@@ -2,18 +2,6 @@ from django.db import models
 import datetime
 
 
-class Supervisor(models.Model):
-    username = models.CharField(max_length=50, unique=True)
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        verbose_name = "Supervisor"
-        verbose_name_plural = "Supervisors"
-
-    def __str__(self):
-        return f'{self.username}'
-
-
 class School(models.Model):
     organisation_id = models.CharField(max_length=50, primary_key=True)
     district = models.CharField(max_length=50, blank=True)
@@ -25,7 +13,7 @@ class School(models.Model):
     principal = models.CharField(blank=False, max_length=50)
     workers_count = models.PositiveIntegerField(blank=True)
     students_count = models.PositiveIntegerField(blank=True)
-    supervisor = models.ForeignKey(Supervisor, on_delete=models.SET_NULL, null=True)
+    # supervisr fk
 
     class Meta:
         verbose_name = "School"
@@ -134,3 +122,15 @@ class Report(models.Model):
 
     def __str__(self):
         return f'{self.school.name} - {self.category}'
+
+
+class Attendance(models.Model):
+    student_present = models.BooleanField(default=False)
+    date = models.DateField(default=datetime.date.today())
+    # student fk
+
+
+class Contractor(models.Model):
+    username = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
