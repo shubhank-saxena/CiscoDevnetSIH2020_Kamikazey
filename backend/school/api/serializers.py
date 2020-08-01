@@ -1,23 +1,22 @@
 from rest_framework.serializers import ModelSerializer, TimeField
-
-
-from backend.school.models import School, FoodSchedule, FoodItem, FoodItemDayMap, Supervisor, Report, Wastage
+from django.contrib.auth.models import User
+from backend.school.models import School, FoodSchedule, FoodItem, FoodItemDayMap, Report, Wastage
 
 
 class SupervisorSerializer(ModelSerializer):
     class Meta:
-        model = Supervisor
+        model = User
         fields = ['id', 'username', 'name']
         read_only_fields = ['id']
 
 
 class SchoolSerializer(ModelSerializer):
 
-    supervisor = SupervisorSerializer(required=True)
+    under_supervisor = SupervisorSerializer(required=True)
 
     class Meta:
         model = School
-        fields = ['organisation_id', 'name', 'api_key', 'URL', 'email', 'contact_no', 'principal', 'workers_count', 'students_count', 'supervisor']
+        fields = ['organisation_id', 'name', 'api_key', 'URL', 'email', 'contact_no', 'principal', 'workers_count', 'students_count', 'under_supervisor']
         read_only_fields = ['id']
 
 

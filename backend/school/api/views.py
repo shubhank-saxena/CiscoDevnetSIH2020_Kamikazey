@@ -1,5 +1,5 @@
-from backend.school.models import School, FoodSchedule, FoodItem, FoodItemDayMap, Supervisor, Report, Wastage
-from .serializers import SchoolSerializer, FoodScheduleSerializer, FoodItemDayMapSerializer, FoodItemSerializer, SupervisorSerializer, ReportSerializer, WastageSerializer
+from backend.school.models import School, FoodSchedule, FoodItem, FoodItemDayMap, Report, Wastage
+from .serializers import SchoolSerializer, FoodScheduleSerializer, FoodItemDayMapSerializer, FoodItemSerializer, ReportSerializer, WastageSerializer
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
@@ -40,16 +40,6 @@ class FoodItemDayMapViewset(viewsets.ModelViewSet):
 
     serializer_class = FoodItemDayMapSerializer
     queryset = FoodItemDayMap.objects.all()
-    permission_class = [
-        IsAuthenticated,
-    ]
-
-
-class SupervisorViewset(viewsets.ModelViewSet):
-    """Manage Suepervisors in database"""
-
-    serializer_class = SupervisorSerializer
-    queryset = Supervisor.objects.all()
     permission_class = [
         IsAuthenticated,
     ]
