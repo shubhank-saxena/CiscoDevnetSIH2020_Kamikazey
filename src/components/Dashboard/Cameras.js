@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { HugeHeading, Flex } from '../../styles/globalStyles';
-import { Card, Statistic, Descriptions, Tag, Result, Button } from 'antd';
+import {
+  Card,
+  Statistic,
+  Descriptions,
+  Tag,
+  Result,
+  Button,
+  Modal,
+} from 'antd';
 import useWindowSize from '../../hooks/useWindowSize';
 import data from '../../constants/lang';
+import req from '../../requests';
 import {
   PieChartOutlined,
   UserOutlined,
@@ -12,6 +21,10 @@ import {
 import { connect } from 'react-redux';
 
 function Camera({ lang }) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [snap, setSnap] = useState(null);
+  const [snapLoading, setSnapLoading] = useState(true);
+  const [errSnap, setErrSnap] = useState(null);
   const size = useWindowSize();
   const [gridStyle, setGridStyle] = useState({
     width: `${(size.width * 0.8) / 3}`,
@@ -22,6 +35,9 @@ function Camera({ lang }) {
     textAlign: 'center',
     border: 'none',
   });
+  const handleOk = () => {
+    setModalVisible(false);
+  };
   useEffect(() => {
     console.log('Hi', size);
     setGridStyle({
@@ -29,6 +45,24 @@ function Camera({ lang }) {
       width: `${size.width < 600 ? '100%' : (size.width * 0.8) / 3}`,
     });
   }, [size]);
+
+  const handleSnapshot = () => {
+    setModalVisible(true);
+    const networkId = 'N_711005791171205780';
+    const deviceId = 'Q2JV-BY67-ABC8';
+    getSnapshot(networkId, deviceId);
+  };
+  const getSnapshot = (networkId, deviceId) => {
+    setSnapLoading(true);
+    req.Snapshot.getSnapshot(networkId, deviceId)
+      .then(json => {
+        console.log(json);
+        setSnap(json);
+        setErrSnap(null);
+      })
+      .catch(err => setErrSnap(err))
+      .finally(() => setSnapLoading(false));
+  };
   return (
     <div style={{ margin: '10vh auto' }}>
       {console.log((size.width * 0.8) / 3)}
@@ -42,7 +76,13 @@ function Camera({ lang }) {
             icon={<CameraOutlined />}
             title="Camera 1"
             extra={[
-              <Button type="primary" key="console">
+              <Button
+                type="primary"
+                key="console"
+                onClick={() => {
+                  handleSnapshot();
+                }}
+              >
                 Snapshot
               </Button>,
               <Button key="buy">Live Stream</Button>,
@@ -82,6 +122,21 @@ function Camera({ lang }) {
           }}
         ></Card.Grid> */}
       </Card>
+      <Modal
+        title="List Of Absentees"
+        centered
+        visible={modalVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+      >
+        {snapLoading ? (
+          <h1>Loading</h1>
+        ) : errSnap ? (
+          <img src={snap.url}></img>
+        ) : (
+          <h1>Error</h1>
+        )}
+      </Modal>
     </div>
   );
 }

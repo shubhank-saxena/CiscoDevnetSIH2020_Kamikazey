@@ -4,6 +4,7 @@ import { Card, Carousel, Statistic, Button, Modal } from 'antd';
 import useWindowSize from '../../hooks/useWindowSize';
 
 import '../../styles/students.css';
+
 function Students() {
   const size = useWindowSize();
   const [modalVisible, setModalVisible] = useState(false);
