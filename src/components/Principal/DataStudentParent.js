@@ -6,7 +6,7 @@ import {
   SubHeading,
   Paragraph,
 } from '../../styles/globalStyles';
-import { Table, Popover } from 'antd';
+import { Table, Popover, Button } from 'antd';
 import data from '../../constants/lang';
 
 const Data = [
@@ -91,6 +91,8 @@ function DataStudentParent({ lang }) {
         List of Students
       </HugeHeading>
       <Table dataSource={Data} columns={columns} />
+      <div style={{ marginTop: '10px' }} />
+      <Button type="primary">create new student</Button>
     </div>
   );
 }
