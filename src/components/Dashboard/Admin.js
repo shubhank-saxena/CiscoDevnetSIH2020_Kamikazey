@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs, Descriptions, Button } from 'antd';
-import { HugeHeading } from '../../styles/globalStyles';
+import { HugeHeading, SubHeading } from '../../styles/globalStyles';
 const { TabPane } = Tabs;
 
 function Admin() {
@@ -64,16 +64,17 @@ function Admin() {
                   1:00 pm
                 </Descriptions.Item>
               </Descriptions>
-              <Button
+              {/* <Button
                 type="primary"
                 style={{ marginTop: '2em', alignSelf: 'flex-end' }}
               >
                 Contractor Details
-              </Button>
+              </Button> */}
             </div>
           </TabPane>
         ))}
       </Tabs>
+      <HugeHeading style={{ marginTop: '2em' }}>Contractor Details</HugeHeading>
     </div>
   );
 }

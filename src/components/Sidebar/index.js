@@ -85,7 +85,7 @@ function Sidebar({ selectedKey, setSelectedKey }) {
             setSelectedKey(4);
           }}
         >
-          Admin
+          Adminstration
         </Menu.Item>
         <Menu.Item
           key="5"
