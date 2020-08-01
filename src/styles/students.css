@@ -1,0 +1,22 @@
+.ant-carousel {
+  height: 40vh;
+}
+.ant-carousel .slick-slide {
+  text-align: center;
+  overflow: hidden;
+  color: black;
+}
+
+.ant-carousel .slick-slide h3 {
+  color: black;
+}
+.ant-carousel .slick-dots-bottom {
+  bottom: 24px !important;
+}
+.ant-carousel.slick-dots li.slick-active button {
+  background: black !important;
+}
+
+.ant-carousel .slick-dots li button {
+  background: black !important;
+}
