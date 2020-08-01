@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
 import { Container, SubContainer, Text } from './styles';
+import data from '../../constants/lang';
+import { connect } from 'react-redux';
 
 const layout = {
   labelCol: {
@@ -17,7 +19,7 @@ const tailLayout = {
   },
 };
 
-function Login() {
+function Login({ lang }) {
   const [Loading, setLoading] = useState(false);
 
   const onFinish = values => {
@@ -32,8 +34,8 @@ function Login() {
     <Container>
       <SubContainer>
         <Text>
-          <h1>LOGIN</h1>
-          <h2>Welcome to Cisco</h2>
+          <h1>{data[lang]['LOGIN_HEADER']}</h1>
+          <h2>{data[lang]['LOGIN_SUBHEADER']}</h2>
         </Text>
 
         <Form
@@ -46,7 +48,7 @@ function Login() {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="EMAIL"
+            label={data[lang]['EMAIL']}
             name="email"
             rules={[
               {
@@ -63,7 +65,7 @@ function Login() {
           </Form.Item>
 
           <Form.Item
-            label="PASSWORD"
+            label={data[lang]['PASSWORD']}
             name="password"
             rules={[
               {
@@ -85,4 +87,10 @@ function Login() {
   );
 }
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    lang: state.gen.lang,
+  };
+};
+
+export default connect(mapStateToProps)(Login);
