@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Collapse } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { Container, SubContainer, Text } from './styles';
 
 const layout = {
@@ -17,7 +17,7 @@ const tailLayout = {
   },
 };
 
-function Login({ lang }) {
+function Login() {
   const [Loading, setLoading] = useState(false);
 
   const onFinish = values => {
