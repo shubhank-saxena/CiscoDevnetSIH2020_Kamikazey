@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from django.contrib.auth.models import User
 
 
 class School(models.Model):
@@ -13,7 +14,7 @@ class School(models.Model):
     principal = models.CharField(blank=False, max_length=50)
     workers_count = models.PositiveIntegerField(blank=True)
     students_count = models.PositiveIntegerField(blank=True)
-    # supervisr fk
+    under_supervisor = models.ForeignKey(User, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = "School"
@@ -127,7 +128,7 @@ class Report(models.Model):
 class Attendance(models.Model):
     student_present = models.BooleanField(default=False)
     date = models.DateField(default=datetime.date.today())
-    # student fk
+    of_student = models.ForeignKey('user.Student', on_delete=models.CASCADE)
 
 
 class Contractor(models.Model):
