@@ -5,6 +5,8 @@ from backend.school.models import School
 class Student(models.Model):
     name = models.CharField(max_length=50)
     of_school = models.ForeignKey(School, on_delete=models.CASCADE)
+    aadhaar_card_image = models.ImageField(upload_to='aadhaar_cards', null=True, blank=True)
+    student_image = models.ImageField(upload_to='student_images', null=True, blank=True)
 
     class Meta:
         verbose_name = "Student"
