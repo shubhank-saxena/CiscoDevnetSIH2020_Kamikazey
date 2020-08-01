@@ -1,8 +1,15 @@
 import React from 'react';
-import Login from './pages/Login';
-
+import { HashRouter as Router } from 'react-router-dom';
+import Routes from './routes';
+import history from './services/history';
 function App() {
-  return <Login />;
+  return (
+    <Router history={history}>
+      <>
+        <Routes />
+      </>
+    </Router>
+  );
 }
 
 export default App;
