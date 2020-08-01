@@ -17,4 +17,4 @@ class Parent(models.Model):
         (FATHER, 'FATHER'),
         (MOTHER, 'MOTHER'),
     ]
-    relation = models.CharField(max_length=10, choices=RELATION_CHOICES)
+    relation_with_student = models.CharField(max_length=10, choices=RELATION_CHOICES)
