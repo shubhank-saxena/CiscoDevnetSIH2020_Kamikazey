@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
@@ -9,6 +9,9 @@ catchall = TemplateView.as_view(template_name='index.html')
 urlpatterns = [
     path('', catchall),
     path('admin/', admin.site.urls),
+    path('api/rest-auth/', include('rest_auth.urls')),
+    path('api/school/', include('backend.school.api.urls')),
+    path('api/alexa/', include('backend.alexa.api.urls')),
 ]
 
 if settings.DEBUG:

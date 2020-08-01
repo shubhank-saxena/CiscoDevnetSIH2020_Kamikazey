@@ -27,6 +27,11 @@ INSTALLED_APPS = [
     'profanity',
     'django_filters',
     "rest_framework",
+    'backend.school',
+    'backend.food_detection',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'backend.alexa',
 ]
 
 if DEBUG:
@@ -93,3 +98,8 @@ USE_TZ = True
 
 # CORS SETTINGS
 CORS_ORIGIN_ALLOW_ALL = True
+
+# REST FRAMEWORK AUTH SETUP
+REST_FRAMEWORK = {'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication',]}
+
+REST_AUTH_SERIALIZERS = {'TOKEN_SERIALIZER': 'backend.config.api.serializers.LoginResponseSerializer'}

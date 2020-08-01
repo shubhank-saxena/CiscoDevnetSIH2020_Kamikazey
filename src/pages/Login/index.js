@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Collapse } from 'antd';
 import { Container, SubContainer, Text } from './styles';
-import data from '../../constants/lang';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { login } from '../../redux/actions';
 
+import data from '../../constants/lang';
+import req from '../../requests';
+import ImgLogin from '../../assets/undraw_authentication_fsn5.svg';
+import { HugeHeading, SubHeading } from '../../styles/globalStyles';
 const layout = {
   labelCol: {
     span: 8,
@@ -20,12 +24,19 @@ const tailLayout = {
 };
 
 function Login({ lang }) {
+  const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
 
   const onFinish = values => {
-    console.log('finished');
+    setLoading(true);
+    req.Auth.login(values)
+      .then(json => {
+        if (json.key && json.groups)
+          dispatch(login('Token ' + json.key, json.groups));
+      })
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   };
-
   const onFinishFailed = errorInfo => {
     console.log('Failed:', errorInfo);
   };
@@ -34,11 +45,10 @@ function Login({ lang }) {
     <Container>
       <SubContainer>
         <Text>
-          <h1>{data[lang]['LOGIN_HEADER']}</h1>
-          <h2>{data[lang]['LOGIN_SUBHEADER']}</h2>
+          <img src={ImgLogin} alt="image"></img>
         </Text>
-
         <Form
+          className="form"
           {...layout}
           name="basic"
           initialValues={{
@@ -47,6 +57,12 @@ function Login({ lang }) {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
+          <HugeHeading style={{ textAlign: 'center', marginBottom: '1vh' }}>
+            {data[lang]['LOGIN_SUBHEADER']}
+          </HugeHeading>
+          <SubHeading style={{ textAlign: 'center', marginBottom: '5vh' }}>
+            {data[lang]['LOGIN_HEADER']}
+          </SubHeading>
           <Form.Item
             label={data[lang]['EMAIL']}
             name="email"
@@ -78,7 +94,7 @@ function Login({ lang }) {
           </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit" loading={Loading}>
-              LOGIN
+              {data[lang]['LOGIN_BTN']}
             </Button>
           </Form.Item>
         </Form>

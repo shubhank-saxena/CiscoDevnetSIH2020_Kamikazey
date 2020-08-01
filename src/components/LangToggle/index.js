@@ -70,6 +70,7 @@ const IconContainer = styled.div`
   margin: 1em 2em;
   font-size: 40px;
   cursor: pointer;
+  z-index: 999;
 `;
 
 const LanguageOption = styled.h3`
