@@ -1,6 +1,6 @@
 from django.db import models
 import datetime
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 
 
 class School(models.Model):
@@ -14,7 +14,7 @@ class School(models.Model):
     principal = models.CharField(blank=False, max_length=50)
     workers_count = models.PositiveIntegerField(blank=True)
     students_count = models.PositiveIntegerField(blank=True)
-    under_supervisor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    under_supervisor = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name = "School"
