@@ -1,17 +1,7 @@
 from django.db import models
-import datetime
-
-
-class Supervisor(models.Model):
-    username = models.CharField(max_length=50, unique=True)
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        verbose_name = "Supervisor"
-        verbose_name_plural = "Supervisors"
-
-    def __str__(self):
-        return f'{self.username}'
+from django.contrib.auth.models import User
+from django.utils import timezone
+from django.core.exceptions import PermissionDenied
 
 
 class School(models.Model):
@@ -22,10 +12,10 @@ class School(models.Model):
     URL = models.URLField(max_length=200, blank=False, unique=True)
     email = models.EmailField(max_length=255, unique=True, verbose_name='email address of any school person', blank=True)
     contact_no = models.PositiveIntegerField()
-    principal = models.CharField(blank=False, max_length=50)
+    principal = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='principal_set')
     workers_count = models.PositiveIntegerField(blank=True)
     students_count = models.PositiveIntegerField(blank=True)
-    supervisor = models.ForeignKey(Supervisor, on_delete=models.SET_NULL, null=True)
+    under_supervisor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='supervisor_set')
 
     class Meta:
         verbose_name = "School"
@@ -33,6 +23,12 @@ class School(models.Model):
 
     def __str__(self):
         return f'{self.organisation_id} - {self.name}'
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.under_supervisor.groups.first().name == "Supervisor" and self.principal.groups.first().name == "Principal":
+            return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+        else:
+            raise PermissionDenied
 
 
 class FoodSchedule(models.Model):
@@ -61,7 +57,7 @@ class FoodSchedule(models.Model):
 class Wastage(models.Model):
     quantity = models.DecimalField(max_digits=6, decimal_places=2)
     food_schedule = models.ForeignKey(FoodSchedule, on_delete=models.CASCADE, null=True, blank=True)
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(default=timezone.now())
 
     class Meta:
         verbose_name = "Food Wastage in kg/week"
@@ -134,3 +130,29 @@ class Report(models.Model):
 
     def __str__(self):
         return f'{self.school.name} - {self.category}'
+
+
+class Attendance(models.Model):
+    student_present = models.BooleanField(default=False)
+    date = models.DateField(default=timezone.now())
+    of_student = models.ForeignKey('user.Student', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Attendance'
+        verbose_name_plural = 'Attendances'
+
+    def __str__(self):
+        return f'{self.of_student} - {self.date} - {self.student_present}'
+
+
+class Contractor(models.Model):
+    username = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Contractor'
+        verbose_name_plural = 'Contractors'
+
+    def __str__(self):
+        return f'{self.username}, {self.name} - school: {self.school}'
