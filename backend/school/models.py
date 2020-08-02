@@ -106,7 +106,7 @@ class FoodItemDayMap(models.Model):
         verbose_name_plural = "Food Item Day Maps"
 
     def __str__(self):
-        return f'{self.day} {self.food_item}'
+        return f'{self.day} - {self.of_schedule}'
 
 
 class Report(models.Model):
