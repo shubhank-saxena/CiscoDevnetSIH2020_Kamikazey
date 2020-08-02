@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from backend.school.models import School
 import requests
 import datetime
@@ -15,7 +15,10 @@ class FoodDetectionView(CreateAPIView):
     serializer_class = None
 
     def create(self, request, *args, **kwargs):
-        cisco_response = {"url": "https://spn4.meraki.com/stream/jpeg/snapshot/b2d123asdf423qd22d2", "expiry": "Access to the image will expire at 2018-12-11T03:12:39Z."}
+        cisco_response = requests.post(
+            'https://api-mp.meraki.com/api/v1/devices/Q2JV-BY67-ABC8/camera/generateSnapshot', headers={'X-Cisco-Meraki-API-Key': 'e4edb0ff642754d2b1f7146967edb38b34b3e49c'}
+        )
+        # cisco_response = {"url": "https://spn4.meraki.com/stream/jpeg/snapshot/b2d123asdf423qd22d2", "expiry": "Access to the image will expire at 2018-12-11T03:12:39Z."}
         org_id = "get from url"
 
         food_provided = requests.post('http://35.213.147.228:5000/predict', data=cisco_response)
@@ -54,3 +57,16 @@ class FoodDetectionView(CreateAPIView):
         file_hash_instance = FileHash(hash=file_hash, school__organisation_id=org_id)
         file_hash_instance.save()
         return Response({'message': 'The food served is according not to schedule'}, status=HTTP_201_CREATED)
+
+
+class SnapshotView(RetrieveAPIView):
+
+    queryset = None
+    serializer_class = None
+    permission_class = None
+
+    def retrieve(self, request, *args, **kwargs):
+        cisco_response = requests.post(
+            'https://api-mp.meraki.com/api/v1/devices/Q2JV-BY67-ABC8/camera/generateSnapshot', headers={'X-Cisco-Meraki-API-Key': 'e4edb0ff642754d2b1f7146967edb38b34b3e49c'}
+        )
+        return Response(cisco_response)
