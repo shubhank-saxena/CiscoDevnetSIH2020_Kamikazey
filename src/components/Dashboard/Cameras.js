@@ -23,6 +23,7 @@ import { connect } from 'react-redux';
 function Camera({ lang }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [snap, setSnap] = useState(null);
+  const [snap2, setSnap2] = useState(null);
   const [snapLoading, setSnapLoading] = useState(true);
   const [errSnap, setErrSnap] = useState(null);
   const size = useWindowSize();
@@ -58,11 +59,21 @@ function Camera({ lang }) {
       .then(json => {
         console.log(json);
         setSnap(json);
+        setSnap2(json);
         setErrSnap(null);
       })
       .catch(err => setErrSnap(err))
       .finally(() => setSnapLoading(false));
   };
+
+  useEffect(() => {
+    setSnap(snap2);
+  }, [snap]);
+
+  const reloadSnap = () => {
+    setSnap({ url: '' });
+  };
+
   return (
     <div style={{ margin: '10vh auto' }}>
       {console.log((size.width * 0.8) / 3)}
@@ -131,8 +142,12 @@ function Camera({ lang }) {
       >
         {snapLoading ? (
           <h1>Loading</h1>
-        ) : errSnap ? (
-          <img src={snap.url}></img>
+        ) : !errSnap ? (
+          <img
+            src={snap.url}
+            style={{ width: '100%', height: '100%' }}
+            onError={() => reloadSnap()}
+          ></img>
         ) : (
           <h1>Error</h1>
         )}
