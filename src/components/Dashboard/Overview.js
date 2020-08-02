@@ -9,6 +9,7 @@ import {
   ScheduleOutlined,
 } from '@ant-design/icons';
 import { connect } from 'react-redux';
+import MQTT from '../MQTT';
 
 function Overview({ lang }) {
   const size = useWindowSize();
@@ -103,6 +104,7 @@ function Overview({ lang }) {
           </Descriptions>
         </Card.Grid>
       </Card>
+      <MQTT />
     </div>
   );
 }

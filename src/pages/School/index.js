@@ -8,7 +8,7 @@ import Admin from '../../components/Dashboard/Admin';
 import Report from '../../components/Dashboard/Report';
 
 function School() {
-  const [selectedKey, setSelectedKey] = useState(3);
+  const [selectedKey, setSelectedKey] = useState(1);
   return (
     <Flex noCenter style={{ overflow: 'hidden' }}>
       <Sidebar selectedKey={selectedKey} setSelectedKey={setSelectedKey} />

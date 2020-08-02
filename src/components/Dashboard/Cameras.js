@@ -134,7 +134,7 @@ function Camera({ lang }) {
         ></Card.Grid> */}
       </Card>
       <Modal
-        title="List Of Absentees"
+        title="Snapshot from Meraki"
         centered
         visible={modalVisible}
         onOk={handleOk}
@@ -143,14 +143,19 @@ function Camera({ lang }) {
         {snapLoading ? (
           <h1>Loading</h1>
         ) : !errSnap ? (
-          <img
-            src={snap.url}
-            style={{ width: '100%', height: '100%' }}
-            onError={() => reloadSnap()}
-          ></img>
+          snap.url ? (
+            <img
+              src={snap.url}
+              style={{ width: '100%', height: '100%' }}
+              onError={() => reloadSnap()}
+            ></img>
+          ) : (
+            <h1>Please Wait</h1>
+          )
         ) : (
           <h1>Error</h1>
         )}
+        <p>Please wait for the image to load, if no Error then it will load</p>
       </Modal>
     </div>
   );
