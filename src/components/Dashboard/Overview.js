@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { HugeHeading, Flex } from '../../styles/globalStyles';
-import { Card, Statistic, Descriptions, Tag } from 'antd';
+import { HugeHeading, Flex, SubHeading } from '../../styles/globalStyles';
+import { Card, Statistic, Descriptions, Tag, Button, notification } from 'antd';
 import useWindowSize from '../../hooks/useWindowSize';
 import data from '../../constants/lang';
 import {
@@ -22,6 +22,7 @@ function Overview({ lang }) {
     textAlign: 'center',
     border: 'none',
   });
+  const [status, setStatus] = useState(1);
   useEffect(() => {
     console.log('Hi', size);
     setGridStyle({
@@ -29,6 +30,16 @@ function Overview({ lang }) {
       width: `${size.width < 600 ? '100%' : (size.width * 0.8) / 3}`,
     });
   }, [size]);
+  useEffect(() => {
+    if (!status) {
+      notification.error({
+        message: <h2>Menu Doesnt match</h2>,
+        description:
+          'The image provided for the food does not match up with the menu provided. There might be some discrepancy in the food made, check out the history section for more details',
+        placement: 'topLeft',
+      });
+    }
+  }, [status]);
   return (
     <div style={{ margin: '10vh auto' }}>
       {console.log((size.width * 0.8) / 3)}
@@ -99,9 +110,46 @@ function Overview({ lang }) {
             <Descriptions.Item
               label={data[lang]['SCHOOL_PAGE']['MENU']['STATUS']}
             >
-              <Tag color="green">Menu is Same</Tag>
+              {status ? (
+                <Tag color="green">Menu is Same</Tag>
+              ) : (
+                <Tag color="red">Menu is not the Same</Tag>
+              )}
             </Descriptions.Item>
           </Descriptions>
+        </Card.Grid>
+        <Card.Grid
+          style={{
+            ...gridStyle,
+            alignItems: 'flex-start',
+            width: '100%',
+          }}
+        >
+          <SubHeading style={{ fontSize: '32px', marginBottom: '20px' }}>
+            Food Status Details
+          </SubHeading>
+          <div>
+            <img
+              src="https://source.unsplash.com/random"
+              height="250px"
+              width="auto"
+              style={{ margin: 0, padding: 0 }}
+            ></img>
+          </div>
+          <Button
+            style={{ marginTop: '20px' }}
+            type="primary"
+            onClick={() => {
+              setStatus(status => {
+                return !status;
+              });
+            }}
+          >
+            Click here to check the status
+          </Button>
+          <p style={{ marginTop: '20px' }}>
+            This will automatically trigger at the Mid Day meal timings
+          </p>
         </Card.Grid>
       </Card>
       {/* <MQTT /> */}

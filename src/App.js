@@ -7,14 +7,14 @@ import { Connector } from 'mqtt-react';
 import LangToggle from './components/LangToggle';
 function App() {
   return (
-    <Connector mqttProps="wss://52.10.7.74:8080">
-      <Router history={history}>
-        <>
-          <Routes />
-          <LangToggle />
-        </>
-      </Router>
-    </Connector>
+    // <Connector mqttProps="wss://52.10.7.74:8080">
+    <Router history={history}>
+      <>
+        <Routes />
+        <LangToggle />
+      </>
+    </Router>
+    // </Connector>
   );
 }
 
