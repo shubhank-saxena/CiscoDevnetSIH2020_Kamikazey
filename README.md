@@ -1,4 +1,4 @@
-# CISCO MID DAY MEAL ANALYTICS SIH 2020 (BDSM - Bhaiyo Desh Sankat Mai hai)
+# CISCO MID DAY MEAL ANALYTICS SIH 2020
 
 ## Setup and running of project (Backend)
 
