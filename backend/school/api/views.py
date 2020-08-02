@@ -46,9 +46,13 @@ class SchoolViewset(viewsets.ModelViewSet):
         return self.serializer_action_classes[self.action]
 
     def get_queryset(self):
-        if Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user.groups.first().name == "Cis-Admin":
+        user = Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user
+        if user.groups.first().name == "Cis-Admin":
             return self.queryset.all()
-        return self.queryset.filter(under_supervisor=Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user)
+        elif user.groups.first().name == "Supervisor":
+            return self.queryset.filter(under_supervisor=user)
+        elif user.groups.first().name == "Principal":
+            return self.queryset.filter(principal=user)
 
 
 class FoodScheduleViewset(viewsets.ModelViewSet):
@@ -59,6 +63,13 @@ class FoodScheduleViewset(viewsets.ModelViewSet):
     permission_classes = [
         IsSchoolPrincipalOrSupervisor,
     ]
+
+    def get_queryset(self):
+        user = Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user
+        if user.groups.first().name == "Supervisor":
+            return self.queryset.filter(school=user)
+        elif user.groups.first().name == "Principal":
+            return self.queryset.filter(principal=user)
 
 
 class WastageViewset(viewsets.ModelViewSet):
