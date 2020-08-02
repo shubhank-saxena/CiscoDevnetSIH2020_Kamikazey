@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/rest-auth/', include('rest_auth.urls')),
     path('api/school/', include('backend.school.api.urls')),
     path('api/alexa/', include('backend.alexa.api.urls')),
+    path('api/food/', include('backend.food_detection.api.urls')),
 ]
 
 if settings.DEBUG:

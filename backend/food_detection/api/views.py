@@ -1,12 +1,13 @@
 from rest_framework.generics import CreateAPIView
 from backend.school.models import School
-import requests
 import datetime
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
-import json
 import secrets
 from backend.food_detection.models import FileHash
+from rest_framework.decorators import api_view
+import requests
+import json
 
 
 class FoodDetectionView(CreateAPIView):
@@ -54,3 +55,13 @@ class FoodDetectionView(CreateAPIView):
         file_hash_instance = FileHash(hash=file_hash, school__organisation_id=org_id)
         file_hash_instance.save()
         return Response({'message': 'The food served is according not to schedule'}, status=HTTP_201_CREATED)
+
+
+headers = {'content-type': 'application/json', 'X-Cisco-Meraki-API-Key': "e4edb0ff642754d2b1f7146967edb38b34b3e49c"}
+
+
+@api_view(['GET', 'POST'])
+def meraki_snapshot(request):
+    if request.method == 'GET':
+        data = requests.post("https://api.meraki.com/api/v0/networks/N_711005791171205780/cameras/Q2JV-BY67-ABC8/snapshot", data=json.dumps({}), headers=headers)
+        return Response(data.json())
