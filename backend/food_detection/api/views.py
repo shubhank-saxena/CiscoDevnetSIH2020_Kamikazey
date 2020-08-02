@@ -8,6 +8,8 @@ from backend.food_detection.models import FileHash
 from rest_framework.decorators import api_view
 import requests
 import json
+from django.http import HttpResponse
+from django.core.mail import send_mail
 
 
 class FoodDetectionView(CreateAPIView):
@@ -65,3 +67,12 @@ def meraki_snapshot(request):
     if request.method == 'GET':
         data = requests.post("https://api.meraki.com/api/v0/networks/N_711005791171205780/cameras/Q2JV-BY67-ABC8/snapshot", data=json.dumps({}), headers=headers)
         return Response(data.json())
+
+
+@api_view(['POST'])
+def mail(request):
+    if request.method == 'POST':
+        send_mail(
+            'Alert Mid Day Meal', f'{request.data["message"]}', 'middaymealcisco@gmail.com', [f'{request.data["email"]}'], fail_silently=False,
+        )
+        return HttpResponse("Sent")
