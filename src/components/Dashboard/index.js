@@ -102,7 +102,7 @@ function Dash({ lang }) {
                       {' '}
                       {data[lang]['DASHBOARD']['PRINCIPAL']}
                     </SubHeading>
-                    <Paragraph>{`: ${school.principal}`}</Paragraph>
+                    <Paragraph>{`: ${school.principal.first_name} ${school.principal.last_name}`}</Paragraph>
                   </Flex>
                   <Flex>
                     <SubHeading> {data[lang]['DASHBOARD']['NOS']}</SubHeading>
