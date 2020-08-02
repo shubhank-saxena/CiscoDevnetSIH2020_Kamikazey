@@ -10,6 +10,13 @@ import requests
 import json
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django.conf import settings
+from twilio.rest import Client
+
+account_sid = settings.TWILIO_ACCOUNT_SID
+auth_token = settings.TWILIO_AUTH_TOKEN
+print(account_sid, auth_token)
+client = Client(account_sid, auth_token)
 
 
 class FoodDetectionView(CreateAPIView):
@@ -75,4 +82,9 @@ def mail(request):
         send_mail(
             'Alert Mid Day Meal', f'{request.data["message"]}', 'middaymealcisco@gmail.com', [f'{request.data["email"]}'], fail_silently=False,
         )
+        message = client.messages.create(body="ALERT!! Your child has not been present for mid day meal today", from_='+18314259427', to='+919814464733')
+        call = client.calls.create(url='http://demo.twilio.com/docs/voice.xml', to='+919814464733', from_='+18314259427')
+
+        print(message.sid)
+        print(call.sid)
         return HttpResponse("Sent")
