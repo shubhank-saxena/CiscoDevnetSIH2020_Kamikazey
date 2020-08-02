@@ -104,7 +104,7 @@ function Overview({ lang }) {
           </Descriptions>
         </Card.Grid>
       </Card>
-      <MQTT />
+      {/* <MQTT /> */}
     </div>
   );
 }
