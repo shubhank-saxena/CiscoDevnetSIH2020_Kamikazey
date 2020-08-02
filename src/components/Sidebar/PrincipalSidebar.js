@@ -55,26 +55,36 @@ function Sidebar({ selectedKey, setSelectedKey }) {
           borderRight: 0,
         }}
       >
+        <SubMenu key="sub1" title={'Timetable'}>
+          <Menu.Item
+            key="1"
+            onClick={() => {
+              setSelectedKey(1);
+            }}
+          >
+            Schedule Creation
+          </Menu.Item>
+          <Menu.Item
+            key="2"
+            onClick={() => {
+              setSelectedKey(2);
+            }}
+          >
+            Food Maping
+          </Menu.Item>
+        </SubMenu>
         <Menu.Item
-          key="1"
+          key="3"
           onClick={() => {
-            setSelectedKey(1);
-          }}
-        >
-          Timetable
-        </Menu.Item>
-        <Menu.Item
-          key="2"
-          onClick={() => {
-            setSelectedKey(2);
+            setSelectedKey(3);
           }}
         >
           Upload Food Image
         </Menu.Item>
         <Menu.Item
-          key="3"
+          key="4"
           onClick={() => {
-            setSelectedKey(3);
+            setSelectedKey(4);
           }}
         >
           Upload Student/Parent Data

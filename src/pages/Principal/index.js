@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Flex } from '../../styles/globalStyles';
 import Sidebar from '../../components/Sidebar/PrincipalSidebar';
-import Timetable from '../../components/Principal/Timetable';
+import ScheduleTimeTable from '../../components/Principal/ScheduleTimeTable';
 import FoodImage from '../../components/Principal/FoodImage';
+import FoodMaping from '../../components/Principal/FoodMaping';
 import DataStudentParent from '../../components/Principal/DataStudentParent';
 import Student from '../../components/Principal/Student';
 
@@ -23,9 +24,12 @@ function School() {
         {(function() {
           switch (selectedKey) {
             case 1:
-              return <Timetable />;
+              return <ScheduleTimeTable />;
               break;
             case 2:
+              return <FoodMaping />;
+              break;
+            case 3:
               return <FoodImage />;
               break;
             case 3:
