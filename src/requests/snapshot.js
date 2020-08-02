@@ -1,12 +1,8 @@
 import { snapshotHeaders } from './headers';
-const ENDPOINT = 'https://api.meraki.com/api';
-
+const ENDPOINT = process.env.REACT_APP_BACKEND;
+const SUB_ROUTE = 'food';
 const getSnapshot = (networkId, deviceId) => {
-  const SUB_ROUTE = `v0/networks/${networkId}/cameras/${deviceId}`;
-  return fetch(`${ENDPOINT}/${SUB_ROUTE}/snapshot`, {
-    method: 'POST',
-    headers: { ...snapshotHeaders },
-  })
+  return fetch(`${ENDPOINT}/${SUB_ROUTE}/snapshot/`, {})
     .then(res => res.json())
     .then(json => Promise.resolve(json))
     .catch(err => console.error(err));
