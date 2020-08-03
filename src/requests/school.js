@@ -56,10 +56,56 @@ const getAllSchools = token => {
     .catch(err => console.error(err));
 };
 
+const creatSchedule = (values, token) => {
+  return fetch(`${ENDPOINT}/${SUB_ROUTE}/food_schedule/`, {
+    method: 'POST',
+    headers: { ...headers, Authorization: token },
+    body: JSON.stringify(values),
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+};
+
+const getSchedule = token => {
+  return fetch(`${ENDPOINT}/${SUB_ROUTE}/food_schedule/`, {
+    method: 'GET',
+    headers: { ...headers, Authorization: token },
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+};
+
+const createFoodMapping = (values, token) => {
+  return fetch(`${ENDPOINT}/${SUB_ROUTE}/food_day_map/`, {
+    method: 'POST',
+    headers: { ...headers, Authorization: token },
+    body: JSON.stringify(values),
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+};
+
+const getFoodMapping = token => {
+  return fetch(`${ENDPOINT}/${SUB_ROUTE}/food_day_map/`, {
+    method: 'GET',
+    headers: { ...headers, Authorization: token },
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+};
+
 export default {
   registerSchool,
   registerFood,
   getFood,
   deleteFoodItem,
   getAllSchools,
+  creatSchedule,
+  getSchedule,
+  createFoodMapping,
+  getFoodMapping,
 };
