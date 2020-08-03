@@ -19,6 +19,8 @@ class Student(models.Model):
 class Parent(models.Model):
     name = models.CharField(max_length=50)
     of_student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
+    contact_no = models.PositiveIntegerField(null=True, blank=True)
 
     FATHER = 'F'
     MOTHER = 'M'
