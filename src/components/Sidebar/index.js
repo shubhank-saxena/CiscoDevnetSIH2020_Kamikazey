@@ -94,7 +94,15 @@ function Sidebar({ selectedKey, setSelectedKey }) {
             setSelectedKey(5);
           }}
         >
-          Report
+          Historical Data
+        </Menu.Item>
+        <Menu.Item
+          key="6"
+          onClick={() => {
+            setSelectedKey(6);
+          }}
+        >
+          Report an issue
         </Menu.Item>
       </Menu>
       <Button

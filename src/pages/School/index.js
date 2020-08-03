@@ -6,6 +6,7 @@ import Students from '../../components/Dashboard/Students';
 import Cameras from '../../components/Dashboard/Cameras';
 import Admin from '../../components/Dashboard/Admin';
 import Report from '../../components/Dashboard/Report';
+import History from '../../components/Dashboard/History';
 
 function School() {
   const [selectedKey, setSelectedKey] = useState(1);
@@ -36,6 +37,9 @@ function School() {
               return <Admin />;
               break;
             case 5:
+              return <History />;
+              break;
+            case 6:
               return <Report />;
               break;
             default:

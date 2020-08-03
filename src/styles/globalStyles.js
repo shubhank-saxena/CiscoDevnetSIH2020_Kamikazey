@@ -8,7 +8,11 @@ export const Flex = styled.div`
     css`
       justify-content: space-between;
     `}
-		
+	${props =>
+    props.centered &&
+    css`
+      justify-content: center;
+    `}
 	${props =>
     props.noCenter &&
     css`
