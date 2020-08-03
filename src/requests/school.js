@@ -63,7 +63,7 @@ const creatSchedule = (values, token) => {
     body: JSON.stringify(values),
   })
     .then(res => res.json())
-    .then(json => console.log(json))
+    .then(json => Promise.resolve(json))
     .catch(err => console.error(err));
 };
 
@@ -73,7 +73,7 @@ const getSchedule = token => {
     headers: { ...headers, Authorization: token },
   })
     .then(res => res.json())
-    .then(json => console.log(json))
+    .then(json => Promise.resolve(json))
     .catch(err => console.error(err));
 };
 
@@ -84,7 +84,7 @@ const createFoodMapping = (values, token) => {
     body: JSON.stringify(values),
   })
     .then(res => res.json())
-    .then(json => console.log(json))
+    .then(json => Promise.resolve(json))
     .catch(err => console.error(err));
 };
 
@@ -94,7 +94,7 @@ const getFoodMapping = token => {
     headers: { ...headers, Authorization: token },
   })
     .then(res => res.json())
-    .then(json => console.log(json))
+    .then(json => Promise.resolve(json))
     .catch(err => console.error(err));
 };
 
