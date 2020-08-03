@@ -10,6 +10,7 @@ from .serializers import (
     WastageSerializer,
     AttendanceSerializer,
     ContractorSerializer,
+    ScheduleGetSerializer,
 )
 
 from rest_framework.permissions import IsAuthenticated
@@ -79,10 +80,20 @@ class FoodScheduleViewset(viewsets.ModelViewSet):
     """Manage Food Schedule in the database"""
 
     serializer_class = FoodScheduleSerializer
+    serializer_action_classes = {
+        'create': FoodScheduleSerializer,
+        'list': ScheduleGetSerializer,
+        'retrieve': ScheduleGetSerializer,
+        'update': FoodScheduleSerializer,
+        'partial_update': FoodScheduleSerializer,
+    }
     queryset = FoodSchedule.objects.all()
     permission_classes = [
         IsSchoolPrincipalOrSupervisor,
     ]
+
+    def get_serializer_class(self):
+        return self.serializer_action_classes[self.action]
 
     def get_queryset(self):
         user = Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user
