@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/school/', include('backend.school.api.urls')),
     path('api/alexa/', include('backend.alexa.api.urls')),
     path('api/food/', include('backend.food_detection.api.urls')),
+    path('api/face/', include('backend.face_detector.urls')),
 ]
 
 if settings.DEBUG:
