@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from twilio.rest import Client
 from rest_framework.authtoken.models import Token
+from django.http import HttpResponseForbidden
 
 
 account_sid = settings.TWILIO_ACCOUNT_SID
@@ -53,39 +54,43 @@ def alerts(request):
             cisco_response = {"url": request.data['image_url']}
             org_id = request.data['school']
 
-            food_provided = requests.post('http://35.213.147.228:5000/predict', data=cisco_response)
+            if School.objects.get(organisation_id=org_id) in user.groups.school_set:
 
-            current_time = datetime.datetime.now()
-            food_schedules_of_school = School.objects.get(organisation_id=org_id).foodschedule_set.all()
-            food_schedule_of_current_time = food_schedules_of_school[0]
-            for food_schedule_of_school in food_schedules_of_school:
-                if abs(food_schedule_of_school.time - current_time) < abs(food_schedule_of_current_time.time - current_time):
-                    food_schedule_of_current_time = food_schedule_of_school
+                food_provided = requests.post('http://35.213.147.228:5000/predict', data=cisco_response)
 
-            current_day = datetime.datetime.today().strftime('%A').upper()[:3]
-            food_items_of_the_day_time = food_schedule_of_current_time.fooditemdaymap_set.get(day=current_day).food_item.all()
+                current_time = datetime.datetime.now()
+                food_schedules_of_school = School.objects.get(organisation_id=org_id).foodschedule_set.all()
+                food_schedule_of_current_time = food_schedules_of_school[0]
+                for food_schedule_of_school in food_schedules_of_school:
+                    if abs(food_schedule_of_school.time - current_time) < abs(food_schedule_of_current_time.time - current_time):
+                        food_schedule_of_current_time = food_schedule_of_school
 
-            for food_item_of_the_day_time in food_items_of_the_day_time:
-                if food_provided.upper() == food_item_of_the_day_time.food_item.upper():
-                    return Response({'message': 'The food served is according to schedule'}, status=HTTP_200_OK)
+                current_day = datetime.datetime.today().strftime('%A').upper()[:3]
+                food_items_of_the_day_time = food_schedule_of_current_time.fooditemdaymap_set.get(day=current_day).food_item.all()
 
-            upload_image = requests.get(cisco_response['url'])
-            image_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': upload_image.content}).json()['Hash']
-            requests.get(f"https://ipfs.infura.io:5001/api/v0/pin/add?arg=/ipfs/{image_hash}")  # pin hash
+                for food_item_of_the_day_time in food_items_of_the_day_time:
+                    if food_provided.upper() == food_item_of_the_day_time.food_item.upper():
+                        return Response({'message': 'The food served is according to schedule'}, status=HTTP_200_OK)
 
-            file_name = f"unmatched_food{secrets.token_hex(16)}.txt"
-            f = open(file_name, "a")
-            f.write(
-                json.dumps(
-                    {
-                        'food_items_of_the_day_time': [food_item_of_the_day_time.food_item for food_item_of_the_day_time in food_items_of_the_day_time],
-                        'food_provided': food_provided,
-                        'image_url': f'https://ipfs.infura.io/ipfs/{image_hash}',
-                    }
+                upload_image = requests.get(cisco_response['url'])
+                image_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': upload_image.content}).json()['Hash']
+                requests.get(f"https://ipfs.infura.io:5001/api/v0/pin/add?arg=/ipfs/{image_hash}")  # pin hash
+
+                file_name = f"unmatched_food{secrets.token_hex(16)}.txt"
+                f = open(file_name, "a")
+                f.write(
+                    json.dumps(
+                        {
+                            'food_items_of_the_day_time': [food_item_of_the_day_time.food_item for food_item_of_the_day_time in food_items_of_the_day_time],
+                            'food_provided': food_provided,
+                            'image_url': f'https://ipfs.infura.io/ipfs/{image_hash}',
+                        }
+                    )
                 )
-            )
-            f.close()
-            file_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': open(file_name, 'rb')})
-            file_hash_instance = FileHash(hash=file_hash, school__organisation_id=org_id)
-            file_hash_instance.save()
-            return Response({'message': 'The food served is according not to schedule'}, status=HTTP_201_CREATED)
+                f.close()
+                file_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': open(file_name, 'rb')})
+                file_hash_instance = FileHash(hash=file_hash, school__organisation_id=org_id)
+                file_hash_instance.save()
+                return Response({'message': 'The food served is according not to schedule'}, status=HTTP_201_CREATED)
+
+        raise HttpResponseForbidden
