@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'rest_auth',
     'backend.alexa',
     'backend.user',
-    'backend.streamapp',
 ]
 
 if DEBUG:
