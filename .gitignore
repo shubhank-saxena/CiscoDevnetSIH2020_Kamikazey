@@ -16,4 +16,3 @@ am291-kamikazey
 
 # Remove facerecog files
 dataset/
-data.yml
