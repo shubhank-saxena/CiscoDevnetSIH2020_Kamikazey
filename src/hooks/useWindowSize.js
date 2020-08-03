@@ -10,7 +10,6 @@ function useWindowSize() {
   useEffect(() => {
     // Handler to call on window resize
     function handleResize() {
-      console.log('Resizing');
       // Set window width/height to state
       setWindowSize({
         width: window.innerWidth,

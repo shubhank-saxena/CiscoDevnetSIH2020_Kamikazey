@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HugeHeading, SubHeading } from '../../styles/globalStyles';
+import { HugeHeading, SubHeading, Flex } from '../../styles/globalStyles';
 import { Card, Carousel, Statistic, Button, Modal } from 'antd';
 import useWindowSize from '../../hooks/useWindowSize';
 
@@ -32,7 +32,7 @@ function Students() {
   return (
     <div style={{ marginTop: '10vh' }}>
       <HugeHeading>Student Details</HugeHeading>
-      <Card style={{ border: 'none' }}>
+      <Card style={{ border: 'none', width: '100%' }}>
         <Card.Grid style={gridStyle}>
           <Carousel
             autoplay

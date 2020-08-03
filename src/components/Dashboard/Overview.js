@@ -13,6 +13,7 @@ import {
 import { connect } from 'react-redux';
 import MQTT from '../MQTT';
 import req from '../../requests';
+import { headers } from '../../requests/headers';
 
 function Overview({ lang, orgId }) {
   const { token } = useSelector(state => {
@@ -38,7 +39,7 @@ function Overview({ lang, orgId }) {
     }
   }, []);
   useEffect(() => {
-    console.log('Hi', size);
+    // console.log('Hi', size);
     setGridStyle({
       ...gridStyle,
       width: `${size.width < 600 ? '100%' : (size.width * 0.8) / 3}`,
@@ -60,12 +61,18 @@ function Overview({ lang, orgId }) {
     const data = {
       image_url: url,
       school: orgId,
+      category: 'LN',
     };
     setLoadingPred(true);
     console.log(token);
     req.FoodPrediction.foodPrediction(data, token)
       .then(json => {
         console.log(('prediction result:', json));
+        if (!json.message) {
+          showNotifications(
+            `Menu is not Same, food expected: ${json.food_expected}, food recieved: ${json.food_provided}`,
+          );
+        }
       })
       .catch(err => console.error(err))
       .finally(() => setLoadingPred(false));
@@ -76,7 +83,7 @@ function Overview({ lang, orgId }) {
     fetch('https://kamikazey.shubhank.codes/api/food/mail/', {
       method: 'POST',
       body: JSON.stringify({
-        message: 'Menu is not the same',
+        message: string,
         email: 'saxena.shubhank.19@gmail.com',
       }),
       headers: {
@@ -89,7 +96,6 @@ function Overview({ lang, orgId }) {
 
   return (
     <div style={{ margin: '10vh auto' }}>
-      {console.log((size.width * 0.8) / 3)}
       <Card
         style={{ width: '80vw', minHeight: '40vh' }}
         title={
@@ -189,9 +195,6 @@ function Overview({ lang, orgId }) {
                 style={{ marginTop: '20px' }}
                 type="primary"
                 onClick={() => {
-                  setStatus(status => {
-                    return true;
-                  });
                   checkStatus(
                     'https://smedia2.intoday.in/aajtak/images/stories/012018/dhokla-pakwangali-520_010818080605.jpg?size=1200:675',
                   );
@@ -221,11 +224,9 @@ function Overview({ lang, orgId }) {
                           'The image provided for the food does not match up with the menu provided. There might be some discrepancy in the food made, check out the history section for more details',
                         placement: 'topLeft',
                       });
-                      showNotifications('Menu Doesnt match');
                     }
                     return false;
                   });
-
                   checkStatus(
                     'https://www.indianhealthyrecipes.com/wp-content/uploads/2019/11/samosa-recipe.jpg',
                   );
@@ -237,6 +238,73 @@ function Overview({ lang, orgId }) {
           </Flex>
           <p style={{ marginTop: '20px' }}>
             This will automatically trigger at the Mid Day meal timings
+          </p>
+        </Card.Grid>
+        <Card.Grid
+          style={{
+            ...gridStyle,
+            alignItems: 'flex-start',
+            width: '100%',
+          }}
+        >
+          <SubHeading style={{ fontSize: '32px', marginBottom: '20px' }}>
+            Attendance Status Details
+          </SubHeading>
+          <Flex spaceBetween style={{ width: '80%', margin: 'auto' }}>
+            <div>
+              <div>
+                <img
+                  src="https://cdn.discordapp.com/attachments/734828835035676814/739776400210526208/2020-08-03-145616.jpg"
+                  height="250px"
+                  width="auto"
+                  style={{ margin: 0, padding: 0 }}
+                ></img>
+              </div>
+              <Button
+                style={{ marginTop: '20px' }}
+                type="primary"
+                onClick={() => {
+                  new Notification('Discrepancy detected in attendance');
+                  notification.info({
+                    message: <h2>error in attendance</h2>,
+                    description:
+                      'Error in student counting. Total student expected: 2, students detected: 1. Missing Student: Priyansh',
+                    placement: 'topLeft',
+                  });
+                  showNotifications(
+                    'Error in student counting. Total student expected: 2, students detected: 1. Missing Student: Priyansh',
+                  );
+                }}
+              >
+                Click here to check the status
+              </Button>
+            </div>
+            <div>
+              <div>
+                <img
+                  src="https://cdn.discordapp.com/attachments/734828835035676814/739776407999217776/2020-08-03-145631.jpg"
+                  height="250px"
+                  width="auto"
+                  style={{ margin: 0, padding: 0 }}
+                ></img>
+              </div>
+              <Button
+                style={{ marginTop: '20px' }}
+                type="primary"
+                onClick={() => {
+                  new Notification('All students present');
+                  notification.info({
+                    message: <h2>All students present</h2>,
+                    placement: 'topLeft',
+                  });
+                }}
+              >
+                Click here to check the status
+              </Button>
+            </div>
+          </Flex>
+          <p style={{ marginTop: '20px' }}>
+            This will automatically trigger at the attendance time
           </p>
         </Card.Grid>
       </Card>

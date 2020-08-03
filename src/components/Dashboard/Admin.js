@@ -74,7 +74,19 @@ function Admin() {
           </TabPane>
         ))}
       </Tabs>
-      <HugeHeading style={{ marginTop: '2em' }}>Contractor Details</HugeHeading>
+      <Descriptions
+        title={`Contractor Details`}
+        bordered
+        column={{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }}
+        style={{ width: '60%', marginTop: '50px' }}
+      >
+        <Descriptions.Item label="Name">Rajesh Kumar</Descriptions.Item>
+        <Descriptions.Item label="Age">49</Descriptions.Item>
+        <Descriptions.Item label="Aadhaar Number">
+          xxxxx-xxxx-xxx
+        </Descriptions.Item>
+        <Descriptions.Item label="Mobile Number">99999999</Descriptions.Item>
+      </Descriptions>
     </div>
   );
 }

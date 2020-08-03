@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { HugeHeading, Flex, SubHeading } from '../../styles/globalStyles';
 import {
@@ -14,7 +14,12 @@ import {
   Scatter,
 } from 'recharts';
 import { Table, Tag } from 'antd';
+import { headers } from '../../requests/headers';
+import useInterval from '../../hooks/useInterval';
 function History() {
+  const [merakiDataFetch, setMerakiDataFetch] = useState(null);
+  const [merakiLiveGraphData, setMerakiLiveGraphData] = useState([]);
+
   const consumptionData = [
     {
       day: 'Monday',
@@ -76,6 +81,46 @@ function History() {
     { x: 'Sat', y: 0 },
   ];
 
+  //MQTT DATA - {ts: 1596444580545, objects: Array(2)}
+  const merakiLiveData = [
+    {
+      x: `${new Date(1382086394000).getHours()}:${new Date(
+        1382086394000,
+      ).getMinutes()}:${new Date(1382086394000).getSeconds()}`,
+      y: 0,
+    },
+    {
+      x: `${new Date(1382086394000).getHours()}:${new Date(
+        1382086394000,
+      ).getMinutes()}:${new Date(1382086394000).getSeconds()}`,
+      y: 1,
+    },
+    {
+      x: `${new Date(1382086394000).getHours()}:${new Date(
+        1382086394000,
+      ).getMinutes()}:${new Date(1382086394000).getSeconds()}`,
+      y: 1,
+    },
+    {
+      x: `${new Date(1382086394000).getHours()}:${new Date(
+        1382086394000,
+      ).getMinutes()}:${new Date(1382086394000).getSeconds()}`,
+      y: 0,
+    },
+    {
+      x: `${new Date(1382086394000).getHours()}:${new Date(
+        1382086394000,
+      ).getMinutes()}:${new Date(1382086394000).getSeconds()}`,
+      y: 2,
+    },
+    {
+      x: `${new Date(1382086394000).getHours()}:${new Date(
+        1382086394000,
+      ).getMinutes()}:${new Date(1382086394000).getSeconds()}`,
+      y: 0,
+    },
+  ];
+
   const dataSource = [
     {
       key: '1',
@@ -111,7 +156,6 @@ function History() {
       time: '1pm',
     },
   ];
-
   const columns = [
     {
       title: 'Day',
@@ -140,6 +184,93 @@ function History() {
       key: 'time',
     },
   ];
+
+  const dataSource2 = [
+    {
+      key: '1',
+      day: 'Monday',
+      studentsReported: '2',
+      studentsRecognized: '1',
+      missingStudents: 'Priyansh',
+      alertTriggered: 'Yes',
+      time: '1pm',
+    },
+    {
+      key: '2',
+      day: 'Wednesday',
+      studentsReported: '2',
+      studentsRecognized: '1',
+      alertTriggered: 'Yes',
+      missingStudents: 'Priyansh',
+      time: '1pm',
+    },
+  ];
+  const columns2 = [
+    {
+      title: 'Day',
+      dataIndex: 'day',
+      key: 'day',
+    },
+    {
+      title: 'Student Reported',
+      dataIndex: 'studentsReported',
+      key: 'studentsReported',
+    },
+    {
+      title: 'Student Recognized',
+      dataIndex: 'studentsRecognized',
+      key: 'studentsRecognized',
+    },
+    {
+      title: 'Missing Students',
+      dataIndex: 'missingStudents',
+      key: 'missingStudents',
+    },
+    {
+      title: 'Alert triggered',
+      dataIndex: 'alertTriggered',
+      key: 'alertTriggered',
+      render: tag => <Tag color="red">{tag}</Tag>,
+    },
+    {
+      title: 'Time',
+      dataIndex: 'time',
+      key: 'time',
+    },
+  ];
+  useEffect(() => {
+    getMerakiData();
+  }, []);
+  useEffect(() => {
+    if (merakiDataFetch) {
+      if (merakiLiveGraphData.length > 5) {
+        merakiLiveGraphData.splice(0, 1);
+      }
+
+      merakiLiveGraphData.push({
+        x: `${new Date(merakiDataFetch.ts).getHours()}:${new Date(
+          merakiDataFetch.ts,
+        ).getMinutes()}:${new Date(merakiDataFetch.ts).getSeconds()}`,
+        y: merakiDataFetch.objects.length || 0,
+      });
+    }
+  }, [merakiDataFetch]);
+  useInterval(() => {
+    console.log('calling mqtt data');
+    getMerakiData();
+  }, 2000);
+  const getMerakiData = async () => {
+    fetch('https://kamikazey.shubhank.codes/api/school/statistics/mqtt', {
+      headers: { ...headers },
+    })
+      .then(res => res.json())
+      .then(json => JSON.parse(json))
+      .then(parseJson => {
+        console.log(parseJson);
+        setMerakiDataFetch(parseJson);
+      })
+      .catch(err => console.error(err));
+  };
   return (
     <div>
       <Container
@@ -206,7 +337,8 @@ function History() {
           </div>
         </Flex>
         <hr />
-        <Flex centered>
+        {/* Alerts triggered analysis */}
+        <Flex spaceBetween style={{ paddingBottom: '50px' }}>
           <div>
             <SubHeading
               style={{
@@ -219,7 +351,7 @@ function History() {
               Alerts Triggered Analysis
             </SubHeading>
             <ScatterChart
-              width={600}
+              width={400}
               height={500}
               margin={{
                 top: 20,
@@ -246,16 +378,60 @@ function History() {
               />
             </ScatterChart>
           </div>
+          <div>
+            <SubHeading
+              style={{
+                textAlign: 'center',
+                marginTop: '50px',
+                marginBottom: '20px',
+                fontWeight: '600',
+              }}
+            >
+              Live Analytics from Meraki Cam
+            </SubHeading>
+            <ScatterChart
+              width={600}
+              height={300}
+              data={merakiLiveGraphData}
+              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid />
+              <XAxis dataKey="x" name="Time" />
+              <YAxis
+                type="number"
+                dataKey="y"
+                name="Number of objects"
+                unit=""
+              />
+              <Tooltip cursor={{ strokeDasharray: '5 5' }} />
+              <Scatter
+                name="Number of objects"
+                data={merakiLiveGraphData}
+                fill="#1DA57A"
+              />
+            </ScatterChart>
+          </div>
         </Flex>
         <hr />
         <SubHeading
           style={{ marginTop: '50px', marginBottom: '20px', fontWeight: '600' }}
         >
-          List of all alerts this week
+          List of all food related alerts this week
         </SubHeading>
         <Table
           dataSource={dataSource}
           columns={columns}
+          style={{ marginTop: '50px' }}
+        ></Table>
+
+        <SubHeading
+          style={{ marginTop: '50px', marginBottom: '20px', fontWeight: '600' }}
+        >
+          List of all attendance related alerts this week
+        </SubHeading>
+        <Table
+          dataSource={dataSource2}
+          columns={columns2}
           style={{ marginTop: '50px' }}
         ></Table>
       </Container>
