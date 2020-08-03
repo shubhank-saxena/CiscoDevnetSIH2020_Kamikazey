@@ -8,8 +8,9 @@ import Admin from '../../components/Dashboard/Admin';
 import Report from '../../components/Dashboard/Report';
 import History from '../../components/Dashboard/History';
 
-function School() {
+function School(props) {
   const [selectedKey, setSelectedKey] = useState(1);
+  const orgId = props.match.params.id;
   return (
     <Flex noCenter style={{ overflow: 'hidden' }}>
       <Sidebar selectedKey={selectedKey} setSelectedKey={setSelectedKey} />
@@ -25,7 +26,7 @@ function School() {
         {(function() {
           switch (selectedKey) {
             case 1:
-              return <Overview />;
+              return <Overview orgId={orgId} />;
               break;
             case 2:
               return <Cameras />;

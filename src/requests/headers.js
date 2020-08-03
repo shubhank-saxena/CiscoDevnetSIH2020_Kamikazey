@@ -1,3 +1,5 @@
+import store from '../redux/store';
+
 export const headers = {
   'Content-Type': 'application/json',
 };

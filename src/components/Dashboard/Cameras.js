@@ -143,7 +143,7 @@ function Camera({ lang }) {
         {snapLoading ? (
           <h1>Loading</h1>
         ) : !errSnap ? (
-          snap.url ? (
+          snap && snap.url ? (
             <img
               src={snap.url}
               style={{ width: '100%', height: '100%' }}

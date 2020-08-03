@@ -90,7 +90,7 @@ function Dash({ lang }) {
                   key={key}
                   style={gridStyle}
                   onClick={() => {
-                    history.push(`/school/${school.schoolId}`);
+                    history.push(`/school/${school.organisation_id}`);
                   }}
                 >
                   <Flex style={{ marginBottom: '2em' }} spaceBetween>

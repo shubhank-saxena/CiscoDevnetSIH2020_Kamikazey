@@ -3,6 +3,8 @@ import { HugeHeading, Flex, SubHeading } from '../../styles/globalStyles';
 import { Card, Statistic, Descriptions, Tag, Button, notification } from 'antd';
 import useWindowSize from '../../hooks/useWindowSize';
 import data from '../../constants/lang';
+import { useSelector } from 'react-redux';
+
 import {
   PieChartOutlined,
   UserOutlined,
@@ -10,8 +12,12 @@ import {
 } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import MQTT from '../MQTT';
+import req from '../../requests';
 
-function Overview({ lang }) {
+function Overview({ lang, orgId }) {
+  const { token } = useSelector(state => {
+    return { ...state.auth };
+  });
   const size = useWindowSize();
   const [gridStyle, setGridStyle] = useState({
     width: `${(size.width * 0.8) / 3}`,
@@ -23,6 +29,7 @@ function Overview({ lang }) {
     border: 'none',
   });
   const [status, setStatus] = useState(1);
+  const [loadingPred, setLoadingPred] = useState(false);
   useEffect(() => {
     if (!('Notification' in window)) {
       console.log('This browser does not support desktop notification');
@@ -49,9 +56,25 @@ function Overview({ lang }) {
     }
   }, [status]);
 
+  const checkStatus = url => {
+    const data = {
+      image_url: url,
+      school: orgId,
+    };
+    setLoadingPred(true);
+    console.log(token);
+    req.FoodPrediction.foodPrediction(data, token)
+      .then(json => {
+        console.log(('prediction result:', json));
+      })
+      .catch(err => console.error(err))
+      .finally(() => setLoadingPred(false));
+  };
+
   const showNotifications = string => {
     new Notification(string);
   };
+
   return (
     <div style={{ margin: '10vh auto' }}>
       {console.log((size.width * 0.8) / 3)}
@@ -103,13 +126,13 @@ function Overview({ lang }) {
             column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
           >
             <Descriptions.Item label={data[lang]['SCHOOL_PAGE']['MENU']['BF']}>
-              Aaloo Paratha
+              Dhokla
             </Descriptions.Item>
             <Descriptions.Item label={data[lang]['SCHOOL_PAGE']['MENU']['BT']}>
               9:00 am
             </Descriptions.Item>
             <Descriptions.Item label={data[lang]['SCHOOL_PAGE']['MENU']['LF']}>
-              Mixed Veg
+              Dhokla
             </Descriptions.Item>
             <Descriptions.Item label={data[lang]['SCHOOL_PAGE']['MENU']['LF']}>
               1:00 pm
@@ -140,25 +163,66 @@ function Overview({ lang }) {
           <SubHeading style={{ fontSize: '32px', marginBottom: '20px' }}>
             Food Status Details
           </SubHeading>
-          <div>
-            <img
-              src="https://source.unsplash.com/random"
-              height="250px"
-              width="auto"
-              style={{ margin: 0, padding: 0 }}
-            ></img>
-          </div>
-          <Button
-            style={{ marginTop: '20px' }}
-            type="primary"
-            onClick={() => {
-              setStatus(status => {
-                return !status;
-              });
-            }}
-          >
-            Click here to check the status
-          </Button>
+          <Flex spaceBetween style={{ width: '80%', margin: 'auto' }}>
+            <div>
+              <div>
+                <img
+                  src="https://smedia2.intoday.in/aajtak/images/stories/012018/dhokla-pakwangali-520_010818080605.jpg?size=1200:675"
+                  height="250px"
+                  width="auto"
+                  style={{ margin: 0, padding: 0 }}
+                ></img>
+              </div>
+              <Button
+                style={{ marginTop: '20px' }}
+                type="primary"
+                onClick={() => {
+                  setStatus(status => {
+                    return true;
+                  });
+                  checkStatus(
+                    'https://smedia2.intoday.in/aajtak/images/stories/012018/dhokla-pakwangali-520_010818080605.jpg?size=1200:675',
+                  );
+                }}
+              >
+                Click here to check the status
+              </Button>
+            </div>
+            <div>
+              <div>
+                <img
+                  src="https://www.indianhealthyrecipes.com/wp-content/uploads/2019/11/samosa-recipe.jpg"
+                  height="250px"
+                  width="auto"
+                  style={{ margin: 0, padding: 0 }}
+                ></img>
+              </div>
+              <Button
+                style={{ marginTop: '20px' }}
+                type="primary"
+                onClick={() => {
+                  setStatus(status => {
+                    if (!status) {
+                      notification.error({
+                        message: <h2>Menu Doesnt match</h2>,
+                        description:
+                          'The image provided for the food does not match up with the menu provided. There might be some discrepancy in the food made, check out the history section for more details',
+                        placement: 'topLeft',
+                      });
+                      showNotifications('Menu Doesnt match');
+                    }
+                    return false;
+                  });
+
+                  checkStatus(
+                    'https://www.indianhealthyrecipes.com/wp-content/uploads/2019/11/samosa-recipe.jpg',
+                  );
+                }}
+              >
+                Click here to check the status
+              </Button>
+            </div>
+          </Flex>
           <p style={{ marginTop: '20px' }}>
             This will automatically trigger at the Mid Day meal timings
           </p>
