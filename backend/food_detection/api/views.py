@@ -56,7 +56,7 @@ def alerts(request):
 
             if School.objects.get(organisation_id=org_id) in user.supervisor_set.all():
 
-                food_provided = requests.post('http://35.213.147.228:5000/predict', data=cisco_response)
+                food_provided = requests.post('http://35.213.147.228:5000/predict', json={"image": cisco_response['url']})
 
                 # current_time = datetime.datetime.now()
                 food_schedule_of_school = School.objects.get(organisation_id=org_id).foodschedule_set.filter(category="LN")[0]
@@ -69,7 +69,7 @@ def alerts(request):
                 food_items_of_the_day_time = food_schedule_of_school.fooditemdaymap_set.get(day=current_day).food_item.all()
 
                 for food_item_of_the_day_time in food_items_of_the_day_time:
-                    if food_provided.upper() == food_item_of_the_day_time.food_item.upper():
+                    if food_provided.text.upper() == food_item_of_the_day_time.food_item.upper():
                         return Response({'message': 'The food served is according to schedule'}, status=HTTP_200_OK)
 
                 upload_image = requests.get(cisco_response['url'])
@@ -82,15 +82,16 @@ def alerts(request):
                     json.dumps(
                         {
                             'food_items_of_the_day_time': [food_item_of_the_day_time.food_item for food_item_of_the_day_time in food_items_of_the_day_time],
-                            'food_provided': food_provided,
+                            'food_provided': food_provided.text,
                             'image_url': f'https://ipfs.infura.io/ipfs/{image_hash}',
                         }
                     )
                 )
                 f.close()
                 file_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': open(file_name, 'rb')})
-                file_hash_instance = Alert(hash=file_hash, school__organisation_id=org_id, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided)
-                file_hash_instance.save()
-                return Response({'food_expected': food_items_of_the_day_time[0].food_item, 'food_provided': food_provided}, status=HTTP_201_CREATED)
+                school = School.objects.get(organisation_id=org_id)
+                alert_instance = Alert(hash=file_hash, school=school, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided.text)
+                alert_instance.save()
+                return Response({'food_expected': food_items_of_the_day_time[0].food_item, 'food_provided': food_provided.text}, status=HTTP_201_CREATED)
 
         raise HttpResponseForbidden
