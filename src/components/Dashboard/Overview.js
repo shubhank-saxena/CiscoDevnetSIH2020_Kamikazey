@@ -24,6 +24,13 @@ function Overview({ lang }) {
   });
   const [status, setStatus] = useState(1);
   useEffect(() => {
+    if (!('Notification' in window)) {
+      console.log('This browser does not support desktop notification');
+    } else {
+      Notification.requestPermission();
+    }
+  }, []);
+  useEffect(() => {
     console.log('Hi', size);
     setGridStyle({
       ...gridStyle,
@@ -38,8 +45,13 @@ function Overview({ lang }) {
           'The image provided for the food does not match up with the menu provided. There might be some discrepancy in the food made, check out the history section for more details',
         placement: 'topLeft',
       });
+      showNotifications('Menu Doesnt match');
     }
   }, [status]);
+
+  const showNotifications = string => {
+    new Notification(string);
+  };
   return (
     <div style={{ margin: '10vh auto' }}>
       {console.log((size.width * 0.8) / 3)}
