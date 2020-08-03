@@ -54,19 +54,19 @@ def alerts(request):
             cisco_response = {"url": request.data['image_url']}
             org_id = request.data['school']
 
-            if School.objects.get(organisation_id=org_id) in user.groups.school_set:
+            if School.objects.get(organisation_id=org_id) in user.supervisor_set.all():
 
                 food_provided = requests.post('http://35.213.147.228:5000/predict', data=cisco_response)
 
-                current_time = datetime.datetime.now()
-                food_schedules_of_school = School.objects.get(organisation_id=org_id).foodschedule_set.all()
-                food_schedule_of_current_time = food_schedules_of_school[0]
-                for food_schedule_of_school in food_schedules_of_school:
-                    if abs(food_schedule_of_school.time - current_time) < abs(food_schedule_of_current_time.time - current_time):
-                        food_schedule_of_current_time = food_schedule_of_school
+                # current_time = datetime.datetime.now()
+                food_schedule_of_school = School.objects.get(organisation_id=org_id).foodschedule_set.filter(category="LN")[0]
+                # food_schedule_of_current_time = food_schedules_of_school[0]
+                # for food_schedule_of_school in food_schedules_of_school:
+                #     if abs(food_schedule_of_school.time - current_time) < abs(food_schedule_of_current_time.time - current_time):
+                #         food_schedule_of_current_time = food_schedule_of_school
 
                 current_day = datetime.datetime.today().strftime('%A').upper()[:3]
-                food_items_of_the_day_time = food_schedule_of_current_time.fooditemdaymap_set.get(day=current_day).food_item.all()
+                food_items_of_the_day_time = food_schedule_of_school.fooditemdaymap_set.get(day=current_day).food_item.all()
 
                 for food_item_of_the_day_time in food_items_of_the_day_time:
                     if food_provided.upper() == food_item_of_the_day_time.food_item.upper():
