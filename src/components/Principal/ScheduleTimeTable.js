@@ -19,13 +19,26 @@ const validateMessages = {
 function ScheduleTimeTable() {
   const [Visible, setVisible] = useState(false);
   const [ScheduleForm] = Form.useForm();
+  const [Schedule, setSchedule] = useState(null);
+  const [FoodMapping, setFoodMapping] = useState(null);
   const { token } = useSelector(state => {
     return { ...state.auth };
   });
 
   useEffect(() => {
-    req.School.getSchedule(token);
+    getFoodMapping();
+    getSchedule();
   }, []);
+
+  const getSchedule = () => {
+    req.School.getSchedule(token).then(json => {
+      setSchedule(json);
+    });
+  };
+
+  const getFoodMapping = () => {
+    req.School.getFoodMapping(token).then(json => setFoodMapping(json));
+  };
 
   const onFinish = values => {
     console.log(values);
