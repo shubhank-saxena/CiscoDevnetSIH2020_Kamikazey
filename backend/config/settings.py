@@ -82,7 +82,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.config.wsgi.application'
 
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),}}
+IN_DOCKER = env.bool("IN_DOCKER", default=False)
+
+if not IN_DOCKER:
+    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),}}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": env("SQL_ENGINE", default="django.db.backends.postgresql"),
+            "NAME": env("SQL_DATABASE", default="cisco"),
+            "USER": env("SQL_USER", default="cisco"),
+            "PASSWORD": env("SQL_PASSWORD", default="cisco"),
+            "HOST": env("SQL_HOST", default="db"),
+            "PORT": env("SQL_PORT", default="5432"),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
