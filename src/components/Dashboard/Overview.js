@@ -73,6 +73,18 @@ function Overview({ lang, orgId }) {
 
   const showNotifications = string => {
     new Notification(string);
+    fetch('https://kamikazey.shubhank.codes/api/food/mail/', {
+      method: 'POST',
+      body: JSON.stringify({
+        message: 'Menu is not the same',
+        email: 'kushdaga1494@gmail.com',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(json => console.log(json));
   };
 
   return (
