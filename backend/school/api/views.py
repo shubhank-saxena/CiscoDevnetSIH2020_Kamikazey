@@ -10,12 +10,16 @@ from .serializers import (
     WastageSerializer,
     AttendanceSerializer,
     ContractorSerializer,
+    ScheduleGetSerializer,
 )
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.status import HTTP_403_FORBIDDEN
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+import subprocess
 
 
 class SchoolViewset(viewsets.ModelViewSet):
@@ -76,10 +80,20 @@ class FoodScheduleViewset(viewsets.ModelViewSet):
     """Manage Food Schedule in the database"""
 
     serializer_class = FoodScheduleSerializer
+    serializer_action_classes = {
+        'create': FoodScheduleSerializer,
+        'list': ScheduleGetSerializer,
+        'retrieve': ScheduleGetSerializer,
+        'update': FoodScheduleSerializer,
+        'partial_update': FoodScheduleSerializer,
+    }
     queryset = FoodSchedule.objects.all()
     permission_classes = [
         IsSchoolPrincipalOrSupervisor,
     ]
+
+    def get_serializer_class(self):
+        return self.serializer_action_classes[self.action]
 
     def get_queryset(self):
         user = Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user
@@ -240,3 +254,11 @@ class ContractorViewset(viewsets.ModelViewSet):
     permission_class = [
         IsSchoolPrincipal,
     ]
+
+
+@api_view(['GET', 'POST'])
+def mqtt(request):
+    if request.method == 'GET':
+        # data = os.system("mosquitto_sub -h  52.10.7.74 -p 1883 -t /merakimv/Q2JV-BY67-ABC8/raw_detections -v")
+        result = subprocess.check_output(['mosquitto_sub', '-h', '52.10.7.74', '-p', '1883', '-t', '/merakimv/Q2JV-BY67-ABC8/raw_detections', '-C', '1'])
+        return Response(result)

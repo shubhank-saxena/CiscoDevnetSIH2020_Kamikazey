@@ -15,4 +15,5 @@ router.register('wastage', views.WastageViewset)
 urlpatterns = [
     path('', include(router.urls)),
     path('attendance/<organisation_id>/', views.AttendanceViews.as_view()),
+    path('statistics/mqtt/', views.mqtt),
 ]

@@ -3,7 +3,7 @@ import datetime
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 import secrets
-from backend.food_detection.models import FileHash
+from backend.food_detection.models import Alert
 from rest_framework.decorators import api_view
 import requests
 import json
@@ -51,7 +51,7 @@ def alerts(request):
         user = Token.objects.filter(key=request.headers['Authorization'].split()[1])[0].user
         if user.groups.first().name == "Supervisor":
             # cisco_response = {"url": "https://spn4.meraki.com/stream/jpeg/snapshot/b2d123asdf423qd22d2", "expiry": "Access to the image will expire at 2018-12-11T03:12:39Z."}
-            cisco_response = {"url": request.data['image_url']}
+            cisco_response = {"image": request.data['image_url']}
             org_id = request.data['school']
 
             if School.objects.get(organisation_id=org_id) in user.groups.school_set:
@@ -89,8 +89,8 @@ def alerts(request):
                 )
                 f.close()
                 file_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': open(file_name, 'rb')})
-                file_hash_instance = FileHash(hash=file_hash, school__organisation_id=org_id)
+                file_hash_instance = Alert(hash=file_hash, school__organisation_id=org_id, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided)
                 file_hash_instance.save()
-                return Response({'message': 'The food served is according not to schedule'}, status=HTTP_201_CREATED)
+                return Response({'food_expected': food_items_of_the_day_time[0].food_item, 'food_provided': food_provided}, status=HTTP_201_CREATED)
 
         raise HttpResponseForbidden
