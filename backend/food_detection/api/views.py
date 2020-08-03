@@ -59,7 +59,7 @@ def alerts(request):
                 food_provided = requests.post('http://35.213.147.228:5000/predict', json={"image": cisco_response['url']})
 
                 # current_time = datetime.datetime.now()
-                food_schedule_of_school = School.objects.get(organisation_id=org_id).foodschedule_set.filter(category="LN")[0]
+                food_schedule_of_school = School.objects.get(organisation_id=org_id).foodschedule_set.filter(category=request.data['category'])[0]
                 # food_schedule_of_current_time = food_schedules_of_school[0]
                 # for food_schedule_of_school in food_schedules_of_school:
                 #     if abs(food_schedule_of_school.time - current_time) < abs(food_schedule_of_current_time.time - current_time):
@@ -88,9 +88,11 @@ def alerts(request):
                     )
                 )
                 f.close()
-                file_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': open(file_name, 'rb')})
+                file_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': open(file_name, 'rb')}).json()["Hash"]
                 school = School.objects.get(organisation_id=org_id)
-                alert_instance = Alert(hash=file_hash, school=school, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided.text)
+                alert_instance = Alert(
+                    hash=file_hash, url=f'https://ipfs.infura.io/ipfs/{file_hash}', school=school, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided.text
+                )
                 alert_instance.save()
                 return Response({'food_expected': food_items_of_the_day_time[0].food_item, 'food_provided': food_provided.text}, status=HTTP_201_CREATED)
 
