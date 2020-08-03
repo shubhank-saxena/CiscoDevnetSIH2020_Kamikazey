@@ -51,7 +51,7 @@ def alerts(request):
         user = Token.objects.filter(key=request.headers['Authorization'].split()[1])[0].user
         if user.groups.first().name == "Supervisor":
             # cisco_response = {"url": "https://spn4.meraki.com/stream/jpeg/snapshot/b2d123asdf423qd22d2", "expiry": "Access to the image will expire at 2018-12-11T03:12:39Z."}
-            cisco_response = {"url": request.data['image_url']}
+            cisco_response = {"image": request.data['image_url']}
             org_id = request.data['school']
 
             if School.objects.get(organisation_id=org_id) in user.groups.school_set:
