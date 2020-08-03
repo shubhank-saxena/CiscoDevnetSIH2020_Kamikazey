@@ -1,0 +1,1 @@
+{"food_items_of_the_day_time": ["rajma"], "food_provided": "dhokla", "image_url": "https://ipfs.infura.io/ipfs/QmbWJJ89fwq7FKcdzQSx3fUk5SAmGaXh1fF78wPh4hU37z"}

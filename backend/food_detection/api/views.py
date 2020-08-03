@@ -93,7 +93,7 @@ def alerts(request):
                 file_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': open(file_name, 'rb')}).json()["Hash"]
                 school = School.objects.get(organisation_id=org_id)
                 alert_instance = Alert(
-                    hash=file_hash, url=f'https://ipfs.infura.io/ipfs/{file_hash}', school=school, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided.text
+                    hash=file_hash, URL=f'https://ipfs.infura.io/ipfs/{file_hash}', school=school, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided.text
                 )
                 alert_instance.save()
                 print(os.remove(f'{settings.BASE_DIR}/unmatched_food{file_hex}.txt'))
