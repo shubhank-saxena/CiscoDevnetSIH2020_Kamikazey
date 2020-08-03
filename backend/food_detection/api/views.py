@@ -14,6 +14,10 @@ from twilio.rest import Client
 from rest_framework.authtoken.models import Token
 from django.http import HttpResponseForbidden
 import os
+from rest_framework.generics import ListAPIView
+from .serializers import AlertSerializer
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsSupervisor
 
 
 account_sid = settings.TWILIO_ACCOUNT_SID
@@ -99,4 +103,19 @@ def alerts(request):
                 os.remove(f'{settings.BASE_DIR}/unmatched_food{file_hex}.txt')
                 return Response({'food_expected': food_items_of_the_day_time[0].food_item, 'food_provided': food_provided.text}, status=HTTP_201_CREATED)
 
+        raise HttpResponseForbidden
+
+
+class AlertListView(ListAPIView):
+
+    permission_class = [IsAuthenticated, IsSupervisor]
+    serializer_class = AlertSerializer
+    queryset = Alert.objects.all()
+
+    def get_queryset(self):
+        user = Token.objects.filter(key=self.request.headers['Authorization'].split()[1])[0].user
+        if School.objects.get(organisation_id=self.kwargs['school_id']).under_supervisor == user:
+            school = School.objects.get(organisation_id=self.kwargs['school_id'])
+            alerts = self.queryset.filter(school=school)
+            return alerts
         raise HttpResponseForbidden
