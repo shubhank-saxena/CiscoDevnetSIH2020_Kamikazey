@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { HugeHeading } from '../../styles/globalStyles';
-import { Table, Modal, Form, Input, Button } from 'antd';
+import { Table, Modal, Form, Input, Button, Tabs, Descriptions } from 'antd';
 import { useSelector } from 'react-redux';
 import req from '../../requests';
+const { TabPane } = Tabs;
 
 const validateMessages = {
   required: '${label} is required!',
@@ -45,12 +46,75 @@ function ScheduleTimeTable() {
     console.log('cancel');
     setVisible(false);
   };
+  const menu = [
+    {
+      day: 'Monday',
+      breakfast: 'Aaloo Paratha',
+      lunch: 'Chawal Daal',
+    },
+    {
+      day: 'Tuesday',
+      breakfast: 'Gobi Paratha',
+      lunch: 'Poori Sabzi',
+    },
+    {
+      day: 'Wednesday',
+      breakfast: 'Salad',
+      lunch: 'Chawal Daal',
+    },
+    {
+      day: 'Thursday',
+      breakfast: 'Aaloo poori',
+      lunch: 'Chawal Daal',
+    },
+    {
+      day: 'Friday',
+      breakfast: 'Idli ',
+      lunch: 'Chawal Daal',
+    },
+    {
+      day: 'Saturday',
+      breakfast: 'Aaloo Paratha',
+      lunch: 'Chawal Daal',
+    },
+  ];
 
   return (
     <div style={{ width: '80%', marginTop: '5vh' }}>
       <HugeHeading style={{ width: '100%' }}>Mid Day Meals Timing</HugeHeading>
       <div>
-        <Table />
+        <Tabs defaultActiveKey="1" tabPosition={`top`} style={{ width: '80%' }}>
+          {menu.map((item, i) => (
+            <TabPane tab={`${item.day}`} key={i}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Descriptions
+                  title={`Menu for ${item.day}`}
+                  bordered
+                  column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
+                >
+                  <Descriptions.Item label="Breakfast Menu">
+                    {item.breakfast}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Breakfast Time">
+                    9:00 am
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Lunch Menu">
+                    {item.lunch}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Lunch Time">
+                    1:00 pm
+                  </Descriptions.Item>
+                </Descriptions>
+                {/* <Button
+                type="primary"
+                style={{ marginTop: '2em', alignSelf: 'flex-end' }}
+              >
+                Contractor Details
+              </Button> */}
+              </div>
+            </TabPane>
+          ))}
+        </Tabs>
         <Modal
           title="Create Schedule"
           visible={Visible}
