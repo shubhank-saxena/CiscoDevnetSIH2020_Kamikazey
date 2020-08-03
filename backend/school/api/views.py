@@ -16,6 +16,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.status import HTTP_403_FORBIDDEN
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+import subprocess
 
 
 class SchoolViewset(viewsets.ModelViewSet):
@@ -240,3 +243,11 @@ class ContractorViewset(viewsets.ModelViewSet):
     permission_class = [
         IsSchoolPrincipal,
     ]
+
+
+@api_view(['GET', 'POST'])
+def mqtt(request):
+    if request.method == 'GET':
+        # data = os.system("mosquitto_sub -h  52.10.7.74 -p 1883 -t /merakimv/Q2JV-BY67-ABC8/raw_detections -v")
+        result = subprocess.check_output(['mosquitto_sub', '-h', '52.10.7.74', '-p', '1883', '-t', '/merakimv/Q2JV-BY67-ABC8/raw_detections', '-C', '1'])
+        return Response(result)
