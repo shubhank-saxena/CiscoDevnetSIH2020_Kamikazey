@@ -96,7 +96,7 @@ def alerts(request):
                     hash=file_hash, URL=f'https://ipfs.infura.io/ipfs/{file_hash}', school=school, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided.text
                 )
                 alert_instance.save()
-                print(os.remove(f'{settings.BASE_DIR}/unmatched_food{file_hex}.txt'))
+                os.remove(f'{settings.BASE_DIR}/unmatched_food{file_hex}.txt')
                 return Response({'food_expected': food_items_of_the_day_time[0].food_item, 'food_provided': food_provided.text}, status=HTTP_201_CREATED)
 
         raise HttpResponseForbidden
