@@ -3,3 +3,4 @@ templates
 .vscode
 *.md
 .gitignore
+data.yml
