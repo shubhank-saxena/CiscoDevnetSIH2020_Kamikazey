@@ -13,6 +13,7 @@ from django.conf import settings
 from twilio.rest import Client
 from rest_framework.authtoken.models import Token
 from django.http import HttpResponseForbidden
+import os
 
 
 account_sid = settings.TWILIO_ACCOUNT_SID
@@ -76,7 +77,8 @@ def alerts(request):
                 image_hash = requests.post('https://ipfs.infura.io:5001/api/v0/add', files={'upload_file': upload_image.content}).json()['Hash']
                 requests.get(f"https://ipfs.infura.io:5001/api/v0/pin/add?arg=/ipfs/{image_hash}")  # pin hash
 
-                file_name = f"unmatched_food{secrets.token_hex(16)}.txt"
+                file_hex = secrets.token_hex(16)
+                file_name = f"backend/unmatched_food{file_hex}.txt"
                 f = open(file_name, "a")
                 f.write(
                     json.dumps(
@@ -94,6 +96,7 @@ def alerts(request):
                     hash=file_hash, url=f'https://ipfs.infura.io/ipfs/{file_hash}', school=school, expected_item_name=food_items_of_the_day_time[0].food_item, provided_item=food_provided.text
                 )
                 alert_instance.save()
+                print(os.remove(f'{settings.BASE_DIR}/unmatched_food{file_hex}.txt'))
                 return Response({'food_expected': food_items_of_the_day_time[0].food_item, 'food_provided': food_provided.text}, status=HTTP_201_CREATED)
 
         raise HttpResponseForbidden
