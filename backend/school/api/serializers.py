@@ -90,3 +90,23 @@ class AttendanceSerializer(ModelSerializer):
         model = Attendance
         fields = ['id', 'student_present', 'date', 'of_student']
         read_only_fields = ['id']
+
+
+class FoodItemDayMapScheduleSerializer(ModelSerializer):
+
+    food_item = FoodItemSerializer(many=True)
+
+    class Meta:
+        model = FoodItemDayMap
+        fields = ['id', 'of_schedule', 'food_item', 'day']
+        read_only_fields = ['id']
+
+
+class ScheduleGetSerializer(ModelSerializer):
+
+    time = TimeField(format='%I:%M %p', input_formats=None)
+    fooditemdaymap_set = FoodItemDayMapScheduleSerializer(many=True)
+
+    class Meta:
+        model = FoodSchedule
+        fields = ['id', 'school', 'category', 'time', 'fooditemdaymap_set']
