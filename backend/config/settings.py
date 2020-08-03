@@ -32,8 +32,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'backend.alexa',
-    'backend.face_detector',
     'backend.user',
+    'backend.streamapp',
 ]
 
 if DEBUG:
