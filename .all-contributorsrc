@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "shubhank-saxena",
+      "name": "Shubhank Saxena",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/29003047?v=4",
+      "profile": "http://shubhank.codes",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "CiscoDevnetSIH2020_Kamikazey",
+  "projectOwner": "shubhank-saxena",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
