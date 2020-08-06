@@ -61,10 +61,9 @@ You will also see any lint errors in the console.
 - As the project uses `pipenv` to manage dependencies, you need to run `pipenv install <package_name>` to install the new package after activating the `pipenv` shell/environment.
 - Use only `yarn add package_name` to add new packages to the frontend part.
 
-## Contributors ✨
+## Project Creators ✨
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
+This project was created with the help of these awesome people! :heart:
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
