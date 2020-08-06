@@ -27,15 +27,3 @@ jobs:
         - pip install pre-commit
       script:
         - pre-commit run --all-files
-    - stage: Deployment
-      name: Full Project Deployment
-      language: python
-      python: '3.8'
-      cache: pip
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_3a3b0d3cfe0f_key -iv $encrypted_3a3b0d3cfe0f_iv -in am291-kamikazey.enc -out am291-kamikazey -d
-        - chmod 400 ./am291-kamikazey
-      install:
-        - pip install ansible
-      script:
-        - ansible-playbook playbooks/deploy.yml

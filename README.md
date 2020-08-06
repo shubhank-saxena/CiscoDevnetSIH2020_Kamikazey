@@ -2,6 +2,13 @@
 <div align='center'>
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/8619923/T1DpAwfh?version=latest#04493690-9e32-4f1c-af9a-f1c2cb6e6013)  
+
+### This is the Team Kamikazey! for the problem statement AM291 Cisco Meraki Mid-Day Meal for Smart India Hackathon 2020
+
+Refer to the following presentation to get the understanding of the workflow and project structure </br>
+
+https://docs.google.com/presentation/d/18b0djYkj5tro1t9USJmXBdODgivMnQn9-xCfCXCkwUY/edit?usp=sharing
+
 </div>
 ## Setup and running of project (Backend)
 
@@ -81,5 +88,3 @@ This project was created with the help of these awesome people! :heart:
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
