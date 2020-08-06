@@ -1,6 +1,6 @@
 # CISCO MID DAY MEAL ANALYTICS SIH 2020
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <div align='center'>
 
@@ -79,6 +79,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://www.linkedin.com/in/parth-shah-97911416a/"><img src="https://avatars0.githubusercontent.com/u/43181887?v=4" width="100px;" alt=""/><br /><sub><b>Parth Sujalkumar Shah</b></sub></a><br /><a href="https://github.com/shubhank-saxena/CiscoDevnetSIH2020_Kamikazey/commits?author=parthsujalshah" title="Code">💻</a> <a href="#design-parthsujalshah" title="Design">🎨</a></td>
     <td align="center"><a href="https://novoresume.com/a/jaskee789.1"><img src="https://avatars3.githubusercontent.com/u/38110126?v=4" width="100px;" alt=""/><br /><sub><b>Jaskeerat Singh Randhawa</b></sub></a><br /><a href="https://github.com/shubhank-saxena/CiscoDevnetSIH2020_Kamikazey/commits?author=jaskeerat789" title="Code">💻</a> <a href="#design-jaskeerat789" title="Design">🎨</a></td>
     <td align="center"><a href="http://shreyagupta30.github.io"><img src="https://avatars1.githubusercontent.com/u/33135343?v=4" width="100px;" alt=""/><br /><sub><b>Shreya Gupta</b></sub></a><br /><a href="https://github.com/shubhank-saxena/CiscoDevnetSIH2020_Kamikazey/commits?author=shreyagupta30" title="Code">💻</a></td>
+    <td align="center"><a href="http://kush-blog.netlify.com"><img src="https://avatars2.githubusercontent.com/u/40840079?v=4" width="100px;" alt=""/><br /><sub><b>Kush Daga</b></sub></a><br /><a href="https://github.com/shubhank-saxena/CiscoDevnetSIH2020_Kamikazey/commits?author=kush-daga" title="Code">💻</a></td>
   </tr>
 </table>
 
