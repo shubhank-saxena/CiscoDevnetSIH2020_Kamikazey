@@ -1,11 +1,7 @@
 # CISCO MID DAY MEAL ANALYTICS SIH 2020
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 <div align='center'>
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/8619923/T1DpAwfh?version=latest#04493690-9e32-4f1c-af9a-f1c2cb6e6013)  ![Website](https://img.shields.io/website?down_color=Red&down_message=Oh%20snap%21&up_color=Green&up_message=Visit&url=https%3A%2F%2Fkamikazey.shubhank.codes)
-
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/8619923/T1DpAwfh?version=latest#04493690-9e32-4f1c-af9a-f1c2cb6e6013)  
 </div>
 ## Setup and running of project (Backend)
 
