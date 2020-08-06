@@ -44,6 +44,15 @@
         "code",
         "design"
       ]
+    },
+    {
+      "login": "shreyagupta30",
+      "name": "Shreya Gupta",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/33135343?v=4",
+      "profile": "http://shreyagupta30.github.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
